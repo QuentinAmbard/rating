@@ -1,14 +1,20 @@
 *.class
+<<<<<<< HEAD
 .project
 .config
 .classpath
 .settings
 .springBeans
 target
+=======
+>>>>>>> f37270ac9971d76ba1ef8fc712446fbad8771124
 
 # Package Files #
 *.jar
 *.war
 *.ear
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> f37270ac9971d76ba1ef8fc712446fbad8771124
