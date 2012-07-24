@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<sec:global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod" value="org.springframework.security.core.context.SecurityContextHolder.setStrategyName" />
+		<property name="arguments">
+			<list>
+				<value>MODE_INHERITABLETHREADLOCAL</value>
+			</list>
+		</property>
+	</bean>
+
+	<sec:http pattern="/jsJawrPath/**" security="none" />
+	<sec:http pattern="/style/**" security="none" />
+	<sec:http pattern="/cssJawrPath/**" security="none" />
+	<sec:http pattern="/media/**" security="none" />
+	<sec:http pattern="/public/**" security="none" />
+	<sec:http pattern="/robots.txt" security="none" />
+	<sec:http pattern="/errors/**" security="none" />
+	<sec:http pattern="/extensions/**" security="none" />
+	<sec:http pattern="/resources/**" security="none" />
+
+	<bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+
+<!-- 	<bean id="accessDeniedHandler" class="com.myprocurement.portal.security.CustomAccessDeniedHandler">
+   	 	<property name="accessDeniedUrl" value="/errors/403.jsp" />
+	</bean>
+ -->
+	<sec:http access-denied-page="/errors/403"  auto-config="false" >
+		<sec:intercept-url pattern="/admin/**" access="ROLE_SUPER_ADMIN" />
+		<sec:intercept-url pattern="/rate/**" access="ROLE_USER" />
+		<sec:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER" />
+		<sec:anonymous username="anonymousUser" granted-authority="ROLE_ANONYMOUS" />
+
+		<sec:form-login login-processing-url="/j_spring_security_check" login-page="/" authentication-failure-url="/?loginError=1"
+			default-target-url="/rate/home" />
+			
+		<sec:logout logout-url="/logout" logout-success-url="/?loginError=-1" />
+		<sec:remember-me user-service-ref="userDetailsServiceImpl" />
+		
+		<sec:session-management session-fixation-protection="migrateSession">
+			<sec:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" expired-url="/?loginError=2" />
+		</sec:session-management>
+	</sec:http>
+
+	<bean id="roleHierarchy" class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+	   <property name="hierarchy">
+	       <value>
+  	           ROLE_SUPER_ADMIN > ROLE_USER
+	       </value>
+	   </property>
+	</bean>
+	
+	<sec:authentication-manager>
+		<sec:authentication-provider user-service-ref="userDetailsServiceImpl">
+			<sec:password-encoder ref="passwordEncoder">
+				<!-- <sec:salt-source user-property="username" /> -->
+			</sec:password-encoder>
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+	
+	<bean id="passwordEncoder" name="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+</beans>
