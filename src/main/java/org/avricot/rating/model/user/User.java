@@ -21,13 +21,6 @@ import javax.persistence.TemporalType;
 import org.avricot.rating.model.DefaultObject;
 import org.avricot.rating.model.Role;
 
-/**
- * Represents a registered user of myprocurement.
- * <p>
- * A user is a {@link Person} with added information about the connection, the
- * subscription, etc.
- * </p>
- */
 @Entity
 @Table(name = "USER")
 public class User extends DefaultObject implements Serializable, Principal {

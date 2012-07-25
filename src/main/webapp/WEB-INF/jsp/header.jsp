@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,6 +15,7 @@
     <!-- Le styles -->
     
     <link href="<c:url value="/resources/css/bootstrap.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/jquery-ui.css"/>" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -32,8 +34,8 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./resources/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./resources/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="./resources/ico/apple-touch-icon-57-precomposed.png">
+ 	<script src="<c:url value="/resources/js/jquery.js"/>"></script>
   </head>
-
   <body>
 
     <div class="navbar navbar-fixed-top">

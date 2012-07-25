@@ -6,7 +6,7 @@
   <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
   <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
 </div>
-<form action="./j_spring_security_check" method="post">
+<form action="<c:url value="/j_spring_security_check"/>" method="post">
 	<input type="text" name="j_username" value="demo@gmail.com" />
 	<input type="password" name="j_password" value="demo" />
 	<input type="submit" value="connexion" />

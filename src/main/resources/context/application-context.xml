@@ -22,4 +22,26 @@
 	<context:component-scan base-package="org.avricot"/>
 	<import resource="classpath:/context/hibernate-context.xml" />
 	<import resource="classpath:/context/security-context.xml" />
+	
+	<bean id="propertyPlaceHolder"
+		class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:default.properties</value>
+			</list>
+		</property>
+		<property name="contextOverride" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+		<property name="ignoreResourceNotFound" value="false" />
+	</bean>
+	
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:messages/text</value>
+			</list>
+		</property>
+		<property name="cacheSeconds" value="${resource.cache.seconds}"/>
+	</bean>
+	
 </beans>
