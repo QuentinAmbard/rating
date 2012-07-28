@@ -1,18 +1,45 @@
 package org.avricot.rating.model.rating;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.avricot.rating.model.DefaultObject;
 import org.avricot.rating.model.company.Company;
-import org.avricot.rating.model.company.EditionStep;
 
 @Entity
 @Table(name = "RATING_PROPERTY")
-public class RatingProperty {
+public class RatingProperty extends DefaultObject {
+    private static final long serialVersionUID = 1L;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
     private Company company;
-    private String name;
-    private String value;
-    private EditionStep step;
+
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
+    @MapKey(name = "year")
+    private Map<Integer, RatingPropertyValue> values = new HashMap<Integer, RatingPropertyValue>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RATING_TYPE_ID")
+    private RatingType type;
+
+    public RatingProperty() {
+
+    }
+
+    public RatingProperty(final Company company, final RatingType type) {
+        this.company = company;
+        this.type = type;
+    }
 
     public Company getCompany() {
         return company;
@@ -22,27 +49,25 @@ public class RatingProperty {
         this.company = company;
     }
 
-    public String getName() {
-        return name;
+    public RatingType getType() {
+        return type;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setType(final RatingType type) {
+        this.type = type;
     }
 
-    public String getValue() {
-        return value;
+    public Map<Integer, RatingPropertyValue> getValues() {
+        return values;
     }
 
-    public void setValue(final String value) {
-        this.value = value;
+    public void setValues(final Map<Integer, RatingPropertyValue> values) {
+        this.values = values;
     }
 
-    public EditionStep getStep() {
-        return step;
+    @Override
+    public String toString() {
+        return "RatingProperty [company=" + company + ", type=" + type + "]";
     }
 
-    public void setStep(final EditionStep step) {
-        this.step = step;
-    }
 }

@@ -21,38 +21,5 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
-    <jpa:repositories base-package="org.avricot.rating" />
-	<!--
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="packagesToScan" value="org.kadeal.demo" />
-		<property name="hibernateProperties">
-			<props>
-				<prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>
-			</props>
-		</property>
-	</bean>
-
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/kadeal" />
-		<property name="username" value="kadeal" />
-		<property name="password" value="kadeal" />
-
-	</bean>
-
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	-->
-
-	<!-- Let spring handle dao exception -->
-	<!--
-	<bean
-		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-	-->
+    <jpa:repositories base-package="org.avricot.rating.repository" />
 </beans>		

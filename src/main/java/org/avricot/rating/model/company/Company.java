@@ -2,11 +2,14 @@ package org.avricot.rating.model.company;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,6 +19,8 @@ import javax.validation.constraints.NotNull;
 
 import org.avricot.rating.model.DefaultObject;
 import org.avricot.rating.model.rating.RatingProperty;
+import org.avricot.rating.model.rating.RatingType;
+import org.avricot.rating.model.user.User;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -27,6 +32,11 @@ public class Company extends DefaultObject {
     @NotNull
     @Column(name = "NAME")
     private String name;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @Column(name = "BUSINESS_ID")
     private String businessId;
@@ -43,8 +53,8 @@ public class Company extends DefaultObject {
     private Sector sector;
 
     @OneToMany(mappedBy = "company")
-    @MapKey(name = "name")
-    private final HashMap<String, RatingProperty> properties = new HashMap<String, RatingProperty>();
+    @MapKey(name = "type")
+    private Map<RatingType, RatingProperty> properties = new HashMap<RatingType, RatingProperty>();
 
     public String getName() {
         return name;
@@ -86,7 +96,19 @@ public class Company extends DefaultObject {
         this.sector = sector;
     }
 
-    public HashMap<String, RatingProperty> getProperties() {
+    public Map<RatingType, RatingProperty> getProperties() {
         return properties;
+    }
+
+    public void setProperties(final HashMap<RatingType, RatingProperty> properties) {
+        this.properties = properties;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(final User user) {
+        this.user = user;
     }
 }

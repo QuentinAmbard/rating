@@ -1,10 +1,16 @@
 package org.avricot.rating.web.controller.rate;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.avricot.rating.model.company.Company;
 import org.avricot.rating.model.company.EditionStep;
 import org.avricot.rating.model.company.Sector;
+import org.avricot.rating.service.CompanyAndRatingProperties;
 import org.avricot.rating.service.ICompanyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,17 +38,50 @@ public class RateController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(final Model model, final Company command) {
-        companyService.createCompany(command);
-        return "redirect:/rate/edit/0";
+        Long companyId = companyService.createCompany(command);
+        return "redirect:/rate/edit/" + companyId + "/0";
     }
 
-    @RequestMapping(value = "/add/{step}", method = RequestMethod.POST)
-    public String editStep(final Model model, final Company command, @PathVariable final int step) {
+    @RequestMapping(value = "/edit/{companyId}/{step}", method = RequestMethod.POST)
+    public String editStep(final Model model, @PathVariable final Long companyId, @PathVariable final int step, final PropertyCommand command) {
+        EditionStep es = EditionStep.getByOrdinal(step);
+        if (es == null) {
+            return "redirect:/rate/edit/" + companyId + "/0";
+        }
+        companyService.updateRatingProperties(es, companyId, command);
+        if (es.getNext() == null) {
+            return "redirect:/rate/show/" + companyId;
+        }
+        return "redirect:/rate/edit/" + companyId + "/" + es.getNext().ordinal();
+    }
+
+    @RequestMapping(value = "/edit/{companyId}/{step}", method = RequestMethod.GET)
+    public String editStep(final Model model, @PathVariable final Long companyId, @PathVariable final int step) throws ParseException {
         EditionStep es = EditionStep.getByOrdinal(step);
         if (es == null) {
             es = EditionStep.getByOrdinal(0);
         }
-        model.addAttribute("step", es.getNext());
+        if (companyId == null) {
+            return "redirect:/rate/home";
+        }
+        CompanyAndRatingProperties data = companyService.getRatingProperties(es, companyId);
+        Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        List<Integer> years = new ArrayList<Integer>();
+        for (int i = 0; i < 3; i++) {
+            years.add(currentYear - i);
+        }
+        model.addAttribute("years", years);
+        // new int[] { 2, 1, 0 }
+        model.addAttribute("currentYear", currentYear);
+        model.addAttribute("data", data);
+        model.addAttribute("step", es);
         return "rate/edit";
     }
+
+    @RequestMapping(value = "/show/{companyId}", method = RequestMethod.GET)
+    public String show(final Model model, @PathVariable final Long companyId) throws ParseException {
+        companyService.getCompanyReport(companyId);
+        return "rate/show";
+    }
+
 }

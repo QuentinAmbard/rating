@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:drools="http://drools.org/schema/drools-spring"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://drools.org/schema/drools-spring http://drools.org/schema/drools-spring.xsd">
+
+
+	<!-- Need to redefine KnowledgeBaseBeanFactory without the namespace to 
+		make configurable the location of the rules. -->
+	<bean id="kBase"
+		class="org.drools.container.spring.beans.KnowledgeBaseBeanFactory">
+		<property name="kbase">
+			<bean class="org.drools.impl.KnowledgeBaseImpl" />
+		</property>
+		<property name="resources">
+			<list>
+				<bean class="org.drools.container.spring.beans.DroolsResourceAdapter">
+					<property name="resourceType">
+						<util:constant static-field="org.drools.builder.ResourceType.DRL" />
+					</property>
+					<property name="resource" value="${rating.rules}" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<drools:ksession id="session" type="stateless" kbase="kBase" />
+
+</beans>
