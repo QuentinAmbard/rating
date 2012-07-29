@@ -19,8 +19,9 @@ import org.springframework.web.context.request.WebRequest;
  */
 public class DefaultBindingInitializer implements WebBindingInitializer {
 
+    @Override
     public void initBinder(final WebDataBinder binder, final WebRequest request) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(false));

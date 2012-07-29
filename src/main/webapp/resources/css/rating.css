@@ -1,0 +1,13 @@
+.rateHome .thumbnails > li{
+	margin-left: 90px;
+}
+
+input.error {
+  color: #b94a48 !important;
+  background-color: #f2dede !important;
+  border-color: #b94a48 !important;
+}
+
+.rateHome .desc {
+	min-height: 70px;
+}

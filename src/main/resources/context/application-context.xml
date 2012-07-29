@@ -79,6 +79,7 @@
 		- ControllerClassNameHandlerMapping - Maps controllers to URLs by using the controller's class name as the basis for the URL.
 		- DefaultAnnotationHandlerMapping - Maps request to controller and controller methods that are annotated with @Request
 		- SimpleUrlHandlerMapping - Maps controllers to URLs using a property collection defined in the Spring application context. -->	
+		
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
  		<property name="webBindingInitializer">
 			<bean class="org.avricot.rating.web.DefaultBindingInitializer"/>

@@ -38,6 +38,12 @@ public class Company extends DefaultObject {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @Column(name = "DAY_NUMBER")
+    private long dayNumber = 365;
+
+    @Column(name = "YEAR_NUMBER")
+    private long yearNumber = 3;
+
     @Column(name = "BUSINESS_ID")
     private String businessId;
 
@@ -55,6 +61,17 @@ public class Company extends DefaultObject {
     @OneToMany(mappedBy = "company")
     @MapKey(name = "type")
     private Map<RatingType, RatingProperty> properties = new HashMap<RatingType, RatingProperty>();
+
+    @Column(name = "SCORE")
+    private Float score;
+
+    public Company() {
+
+    }
+
+    public Company(final User user) {
+        this.user = user;
+    }
 
     public String getName() {
         return name;
@@ -104,6 +121,10 @@ public class Company extends DefaultObject {
         this.properties = properties;
     }
 
+    public void setProperties(final Map<RatingType, RatingProperty> properties) {
+        this.properties = properties;
+    }
+
     public User getUser() {
         return user;
     }
@@ -111,4 +132,29 @@ public class Company extends DefaultObject {
     public void setUser(final User user) {
         this.user = user;
     }
+
+    public long getDayNumber() {
+        return dayNumber;
+    }
+
+    public void setDayNumber(final long dayNumber) {
+        this.dayNumber = dayNumber;
+    }
+
+    public long getYearNumber() {
+        return yearNumber;
+    }
+
+    public void setYearNumber(final long yearNumber) {
+        this.yearNumber = yearNumber;
+    }
+
+    public Float getScore() {
+        return score;
+    }
+
+    public void setScore(final Float score) {
+        this.score = score;
+    }
+
 }

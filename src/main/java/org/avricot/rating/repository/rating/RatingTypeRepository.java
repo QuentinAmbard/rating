@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface RatingTypeRepository extends CrudRepository<RatingType, Long> {
-    @Query("from RatingType rt where rt.step=?1 and (rt.sector=?2 or rt.sector is null)")
+    @Query("from RatingType rt where rt.step=?1 and (rt.sector=?2 or rt.sector is null) order by rt.order ASC")
     List<RatingType> findByStepAndSectorOrSectorIsNull(EditionStep es, Sector sector);
 
     RatingType findByNameAndStep(String name, EditionStep es);

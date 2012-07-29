@@ -71,11 +71,13 @@ public class RatingPropertyValue extends DefaultObject {
     }
 
     public Integer getint() {
+        if (value == null) {
+            return 0;
+        }
         try {
             return Integer.valueOf(value);
         } catch (NumberFormatException e) {
-            LOGGER.error("can't convert to int {}", value);
-            throw e;
+            return 0;
         }
     }
 

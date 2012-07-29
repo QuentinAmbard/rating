@@ -1,7 +1,7 @@
 #created on: Dec 14, 2011
-package karl
+package rating
 
-#list any import classes here.
+#list any import classes here.doo
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,29 +11,21 @@ import org.avricot.rating.model.rating.RatingProperty;
 import org.avricot.rating.model.rating.RatingPropertyValue;
 import org.avricot.rating.model.rating.Type;
 
-#declare any global variables here
-global HashMap result
-global HashMap prop
-global Company company
+import function org.avricot.rating.service.rule.RuleHelper.get
+
+#declare any global variables here;
+global HashMap result;
+global HashMap<String, Calc> prop;
+global Company company;
+global Map<Integer,RatingPropertyValue> vals;
+
 
 rule "Common rules"
 when
-	 eval( true )
-	 $company : Company()
-	 $prop : Map()
+	 eval(true)
 then
-	$sector : $company.getSector();
-	result.put("OK", "sdf");
-	result.put("OK_INT", "azea");
+	result.put("TEST", get(prop, "TEST_INT").plus(get(prop, "TEST_INT")));
 	LoggerFactory.getLogger("karl-rules").info("Ok pour les commons");
-end
-
-rule "test"
-when
-	Map(prop.containsKey("TEST_INT"))
-then
-   result.put("CONTAINS TEST", prop.get("TEST_INT"));
-   LoggerFactory.getLogger("karl-rules").info("Ok pour le test");
 end
 
 

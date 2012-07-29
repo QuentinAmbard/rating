@@ -1,17 +1,10 @@
 <hr>
 
       <footer>
-        <p>&copy; Company 2012</p>
+        <p>&copy; Fairness rating 2012</p>
       </footer>
 
     </div> <!-- /container -->
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-   
-    <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
-    <script src="<c:url value="/resources/js/jquery-ui.js"/>"></script>
 
   </body>
 </html>

@@ -947,7 +947,7 @@ input[type="color"],
 }
 input,
 textarea {
-  width: 210px;
+  width: 160px;
 }
 textarea {
   height: auto;
@@ -1038,7 +1038,7 @@ input[type="file"] {
   line-height: 28px;
 }
 select {
-  width: 220px;
+  width: 170px;
   border: 1px solid #bbb;
 }
 select[multiple],

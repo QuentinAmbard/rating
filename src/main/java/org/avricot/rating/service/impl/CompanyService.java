@@ -13,6 +13,7 @@ import org.avricot.rating.model.company.EditionStep;
 import org.avricot.rating.model.rating.RatingProperty;
 import org.avricot.rating.model.rating.RatingPropertyValue;
 import org.avricot.rating.model.rating.RatingType;
+import org.avricot.rating.model.rating.Type;
 import org.avricot.rating.model.user.User;
 import org.avricot.rating.repository.company.CompanyRepository;
 import org.avricot.rating.repository.rating.RatingPropertyRepository;
@@ -21,8 +22,11 @@ import org.avricot.rating.repository.rating.RatingTypeRepository;
 import org.avricot.rating.security.SecurityUtils;
 import org.avricot.rating.security.UnauthorizedException;
 import org.avricot.rating.service.CompanyAndRatingProperties;
+import org.avricot.rating.service.CompanyCommand;
 import org.avricot.rating.service.CompanyReport;
+import org.avricot.rating.service.CompanySearchCriterion;
 import org.avricot.rating.service.ICompanyService;
+import org.avricot.rating.service.rule.Calc;
 import org.avricot.rating.service.rule.IRulesService;
 import org.avricot.rating.web.controller.rate.PropertyCommand;
 import org.springframework.stereotype.Service;
@@ -44,8 +48,20 @@ public class CompanyService implements ICompanyService {
     private IRulesService<Map<String, ?>> rulesService;
 
     @Override
-    public Long createCompany(final Company company) {
-        company.setUser(SecurityUtils.getCurrentUser());
+    public Long updateCompany(final CompanyCommand command) {
+        Company company;
+        if (command.getId() != null) {
+            company = getCompanyForCurrentUser(command.getId());
+        } else {
+            company = new Company(SecurityUtils.getCurrentUser());
+        }
+        company.setName(command.getName());
+        company.setCreationDate(command.getCreationDate());
+        company.setBusinessId(command.getBusinessId());
+        company.setDayNumber(command.getDayNumber());
+        company.setYearNumber(command.getYearNumber());
+        company.setLeaderName(command.getLeaderName());
+        company.setSector(command.getSector());
         companyRepository.save(company);
         return company.getId();
     }
@@ -88,7 +104,8 @@ public class CompanyService implements ICompanyService {
         }
     }
 
-    private Company getCompanyForCurrentUser(final Long companyId) {
+    @Override
+    public Company getCompanyForCurrentUser(final Long companyId) {
         User currentUser = SecurityUtils.getCurrentUser();
         Company company = companyRepository.getByIdAndUserId(companyId, currentUser.getId());
         if (company == null) {
@@ -100,11 +117,30 @@ public class CompanyService implements ICompanyService {
     @Override
     public CompanyReport getCompanyReport(final Long companyId) {
         Company company = getCompanyForCurrentUser(companyId);
-        Map<String, RatingProperty> properties = new HashMap<String, RatingProperty>();
+        Map<String, Calc> properties = new HashMap<String, Calc>();
         for (Entry<RatingType, RatingProperty> e : company.getProperties().entrySet()) {
-            properties.put(e.getKey().getName(), e.getValue());
+            if (e.getKey().getType() == Type.NUM) {
+                Calc calc = new Calc();
+                for (Entry<Integer, RatingPropertyValue> v : e.getValue().getValues().entrySet()) {
+                    calc.getValues().put(v.getKey(), v.getValue().getint());
+                }
+                properties.put(e.getKey().getName(), calc);
+            }
         }
-        Map<String, ?> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "prop", "compay" }, new Object[] { properties, company });
+        Map<String, ?> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "prop", "company" }, new Object[] { properties, company });
         return new CompanyReport();
+    }
+
+    @Override
+    public List<Company> getCompanies() {
+        User currentUser = SecurityUtils.getCurrentUser();
+        List<Company> companies = companyRepository.getByUserId(currentUser.getId());
+        return companies;
+    }
+
+    @Override
+    public List<Company> getCompanies(final CompanySearchCriterion criterion) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        return companyRepository.search(currentUser.getId(), criterion);
     }
 }

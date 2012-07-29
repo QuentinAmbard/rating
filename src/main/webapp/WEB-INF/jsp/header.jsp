@@ -1,6 +1,7 @@
 <%-- taglib prefix="sec" uri="http://www.springframework.org/security/tags" --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
@@ -14,6 +15,7 @@
 
     <!-- Le styles -->
     
+    <link href="<c:url value="/resources/css/rating.css"/>" rel="stylesheet">
     <link href="<c:url value="/resources/css/bootstrap.css"/>" rel="stylesheet">
     <link href="<c:url value="/resources/css/jquery-ui.css"/>" rel="stylesheet">
     <style type="text/css">
@@ -35,6 +37,12 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./resources/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="./resources/ico/apple-touch-icon-57-precomposed.png">
  	<script src="<c:url value="/resources/js/jquery.js"/>"></script>
+    <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+    <script src="<c:url value="/resources/js/jquery-ui.js"/>"></script>
+    <script src="<c:url value="/resources/js/validate.js"/>"></script>
+    <script src="<c:url value="/resources/js/rate-validation.js"/>"></script>
+ 	
+ 	
   </head>
   <body>
 

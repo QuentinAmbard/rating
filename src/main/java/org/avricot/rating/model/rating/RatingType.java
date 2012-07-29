@@ -33,6 +33,18 @@ public class RatingType extends DefaultObject {
     @Column(name = "DEFAULT_VALUE")
     private String defaultValue;
 
+    @Column(name = "VALIDATION")
+    private String validation;
+
+    @Column(name = "SUB_MENU")
+    private String subMenu;
+
+    @Column(name = "ORDER")
+    private int order;
+
+    @Column(name = "SUM")
+    private String sum;
+
     public EditionStep getStep() {
         return step;
     }
@@ -80,5 +92,37 @@ public class RatingType extends DefaultObject {
     @Override
     public String toString() {
         return "RatingType [sector=" + sector + ", step=" + step + ", name=" + name + ", type=" + type + ", defaultValue=" + defaultValue + "]";
+    }
+
+    public String getValidation() {
+        return validation;
+    }
+
+    public void setValidation(final String validation) {
+        this.validation = validation;
+    }
+
+    public String getSubMenu() {
+        return subMenu;
+    }
+
+    public void setSubMenu(final String subMenu) {
+        this.subMenu = subMenu;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(final int order) {
+        this.order = order;
+    }
+
+    public String getSum() {
+        return sum;
+    }
+
+    public void setSum(final String sum) {
+        this.sum = sum;
     }
 }
