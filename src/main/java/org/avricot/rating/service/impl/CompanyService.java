@@ -65,7 +65,6 @@ public class CompanyService implements ICompanyService {
         company.setBusinessId(command.getBusinessId());
         company.setDayNumber(command.getDayNumber());
         company.setYearNumber(command.getYearNumber());
-        company.setLeaderName(command.getLeaderName());
         company.setSector(command.getSector());
         companyRepository.save(company);
         return company.getId();
@@ -134,8 +133,8 @@ public class CompanyService implements ICompanyService {
         }
         Map<String, Object> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "prop", "company" }, new Object[] { properties, company });
         // TODO pour les tests à enlever
-        result.put("PERCENT_CROI", new Calc());
-        result.put("CA", new Calc());
+        // result.put("PERCENT_CROI", new Calc());
+        // result.put("CA", new Calc());
         List<Result> resultTypes = resultRepository.findBySectorOrSectorIsNull(company.getSector());
         Map<String, List<Result>> map = new LinkedHashMap<String, List<Result>>();
         for (Result r : resultTypes) {

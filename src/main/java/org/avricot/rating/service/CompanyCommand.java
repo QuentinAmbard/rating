@@ -13,7 +13,6 @@ public class CompanyCommand {
     private String name;
     private String businessId;
     private Date creationDate;
-    private String leaderName;
     private Sector sector;
     private long dayNumber;
     private long yearNumber;
@@ -27,7 +26,6 @@ public class CompanyCommand {
         name = company.getName();
         businessId = company.getBusinessId();
         creationDate = company.getCreationDate();
-        leaderName = company.getLeaderName();
         sector = company.getSector();
         dayNumber = company.getDayNumber();
         yearNumber = company.getYearNumber();
@@ -55,14 +53,6 @@ public class CompanyCommand {
 
     public void setCreationDate(final Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public String getLeaderName() {
-        return leaderName;
-    }
-
-    public void setLeaderName(final String leader) {
-        this.leaderName = leader;
     }
 
     public Sector getSector() {

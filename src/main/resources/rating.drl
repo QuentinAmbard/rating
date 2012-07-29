@@ -24,8 +24,22 @@ rule "Common rules"
 when
 	 eval(true)
 then
-	result.put("TEST", get(prop, "TEST_INT").plus(get(prop, "TEST_INT")));
-	LoggerFactory.getLogger("karl-rules").info("Ok pour les commons");
+	#moyenne sur année N et N-1 du CA
+	result.put("REVENUES_AVG2", get(prop, "INCOME_SALES").avg(2));
+	#recupere la valeur du fixed assets (non current) sur annee N
+	result.put("FIXED_ASSETS", get(prop, "BALANCE_FIXED_ASSETS"));
+	
+	result.put("TOTAL_DEBT", get(prop, "BALANCE_LONG_TERM_DEBT").plus(get(prop, "BALANCE_SHORT_TERM_DEBT")));
+	result.put("NET_DEBT", get(result, "TOTAL_DEBT").minus(get(prop, "BALANCE_CASH_EQUI")));
+	result.put("NET_DEBT_OVER_EBITDA", get(result, "NET_DEBT").div(get(prop, "INCOME_EBITDA")));
+	result.put("NET_DEBT_OVER_EBITDA_AVG2", get(result, "NET_DEBT_OVER_EBITDA").avg(2));
+	
+	result.put("FFO", get(prop, "CASH_FFO"));
+	result.put("FFO_OVER_TOTAL_DEBT", get(result, "FFO").div(get(result, "TOTAL_DEBT")));
+	
+	result.put("RCF", get(result, "FFO").minus(get(prop, "CASH_DIVIDEND_PAID")));
+	result.put("RCF_OVER_NET_DEBT", get(result, "RCF").div(get(result, "NET_DEBT")));
+
 end
 
 

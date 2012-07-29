@@ -48,6 +48,12 @@ public class RatingType extends DefaultObject {
     @Column(name = "HIDE")
     private boolean hidden;
 
+    @Column(name = "H_LEVEL")
+    private String hLevel;
+
+    @Column(name = "GLOBAL")
+    private boolean global;
+
     public EditionStep getStep() {
         return step;
     }
@@ -135,5 +141,21 @@ public class RatingType extends DefaultObject {
 
     public void setHidden(final boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public String gethLevel() {
+        return hLevel;
+    }
+
+    public void sethLevel(final String hLevel) {
+        this.hLevel = hLevel;
+    }
+
+    public boolean isGlobal() {
+        return global;
+    }
+
+    public void setGlobal(final boolean global) {
+        this.global = global;
     }
 }

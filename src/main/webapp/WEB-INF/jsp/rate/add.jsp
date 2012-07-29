@@ -34,14 +34,12 @@
 	      <label class="control-label" for="companyName">Company name *</label>
 	      <div class="controls">
 			<form:input path="name" cssClass="required"  cssErrorClass="error" />
-	        <p class="help-block">enter the company name</p>
 	      </div>
 	    </div>
 	    <div class="control-group">
-	      <label class="control-label" for="businessId">Identifier</label>
+	      <label class="control-label" for="businessId">Identifier</label> <p class="help-block">enter the company identifier (rcs, siren etc.)</p>
 	      <div class="controls">
 			<form:input path="businessId" id="businessId" cssErrorClass="error" />
-	        <p class="help-block">enter the company identifier (rcs, siren etc.)</p>
 	      </div>
 	    </div>
 	    <div class="control-group">
@@ -49,13 +47,6 @@
 	      <div class="controls">
 			<form:input path="creationDate" id="creationDate" cssErrorClass="error" />
 	        <p class="help-block">enter the company registration date</p>
-	      </div>
-	    </div>
-	    <div class="control-group">
-	      <label class="control-label" for="leader">Leader</label>
-	      <div class="controls">
-			<form:input path="leaderName" id="leader" cssErrorClass="error" />
-	        <p class="help-block">enter the leader name</p>
 	      </div>
 	    </div>
 	  </div>

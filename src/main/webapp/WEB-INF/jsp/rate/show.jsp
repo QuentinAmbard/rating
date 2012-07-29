@@ -12,6 +12,9 @@
 </script>
 
 <div class="row show-grid">
+	<h2>Entreprise ${report.company.name} : ${report.company.score}</h2>
+	<p>Identifiant : ${report.company.businessId}</p>
+	
     <div class="span6">
     
     </div>
@@ -43,5 +46,10 @@
 	</div>
 </div>
 
+<sec:authorize ifAllGranted="ROLE_SUPER_ADMIN">
+<c:forEach var="resutValue" items="${report.results}">
+	<c:out value="${resutValue.key}"/> => <c:out value="${resutValue.value}"/><br />
+</c:forEach>
+</sec:authorize>
       
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>

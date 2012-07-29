@@ -18,8 +18,10 @@ RATING.validation = function () {
 					}
 				});
 				sumEl.val(sum);
+				sumEl.change();
 			});
 		});
+
 	});
 	$('input[data-validation]').each(function () {
 		var val = $(this).attr("data-validation").replace(/'/g,'"') ;

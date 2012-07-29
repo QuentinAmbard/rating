@@ -63,6 +63,15 @@ public class Calc {
         return plus(-value);
     }
 
+    public Calc minus(final Calc c) {
+        Calc result = new Calc();
+        for (Entry<Integer, Float> e : values.entrySet()) {
+            Float value = e.getValue() - c.getValues().get(e.getKey());
+            result.getValues().put(e.getKey(), value);
+        }
+        return result;
+    }
+
     public Calc plus(final Calc c) {
         Calc result = new Calc();
         for (Entry<Integer, Float> e : values.entrySet()) {
@@ -75,10 +84,25 @@ public class Calc {
     public Float avg(final Integer yearsNumber) {
         Float result = 0F;
         Integer currentYear = getCurrentYear();
-        for (int i = currentYear; i < currentYear - yearsNumber; i--) {
+        for (int i = currentYear; i > currentYear - yearsNumber; i--) {
             result += values.get(i);
         }
-        return 100 * result / yearsNumber;
+        return result / yearsNumber;
+    }
+
+    public Calc growth(final Calc c) {
+        Calc result = new Calc();
+        for (Entry<Integer, Float> e : values.entrySet()) {
+            Float previousValue = c.getValues().get(e.getKey() - 1);
+            Float value;
+            if (previousValue == 0F) {
+                value = 0F;
+            } else {
+                value = e.getValue() / previousValue;
+            }
+            result.getValues().put(e.getKey(), value);
+        }
+        return result;
     }
 
     private Integer getCurrentYear() {

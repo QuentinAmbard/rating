@@ -21,17 +21,24 @@ import org.avricot.rating.model.DefaultObject;
 import org.avricot.rating.model.rating.RatingProperty;
 import org.avricot.rating.model.rating.RatingType;
 import org.avricot.rating.model.user.User;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "COMPANY")
 public class Company extends DefaultObject {
     private static final long serialVersionUID = 1L;
 
-    @NotBlank
-    @NotNull
+    @NotEmpty
     @Column(name = "NAME")
     private String name;
+
+    @NotEmpty
+    @Column(name = "ANNALISTE_NAME")
+    private String annalistName;
+
+    @NotEmpty
+    @Column(name = "DESCRIPTION")
+    private String description;
 
     @NotNull
     @ManyToOne
@@ -50,9 +57,6 @@ public class Company extends DefaultObject {
     @Temporal(TemporalType.DATE)
     @Column(name = "CREATION_DATE")
     private Date creationDate;
-
-    @Column(name = "LEADER_NAME")
-    private String leaderName;
 
     @Column(name = "SECTOR")
     @Enumerated(EnumType.STRING)
@@ -95,14 +99,6 @@ public class Company extends DefaultObject {
 
     public void setCreationDate(final Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public String getLeaderName() {
-        return leaderName;
-    }
-
-    public void setLeaderName(final String leaderName) {
-        this.leaderName = leaderName;
     }
 
     public Sector getSector() {
@@ -155,6 +151,22 @@ public class Company extends DefaultObject {
 
     public void setScore(final Float score) {
         this.score = score;
+    }
+
+    public String getAnnalistName() {
+        return annalistName;
+    }
+
+    public void setAnnalistName(final String annalistName) {
+        this.annalistName = annalistName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
 }

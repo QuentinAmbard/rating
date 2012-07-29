@@ -2,10 +2,11 @@
   <script type="text/javascript">
 	$(document).ready(function () {
 		new RATING.validation();
-		$("#formAdd").validate();
+		$("#editForm").validate();
 		$('.datePicker').datepicker({dateFormat: "dd/mm/yy"});
 		$('#save').click(function () {
 			$('#next').val("false");
+			$("#editForm").validate().cancelSubmit = true;
 			$('#editForm').submit();
 		});
 	});
@@ -33,7 +34,7 @@
 			    </tr>
 		    </c:if>
 		  	<tr>
-		    	<td><spring:message code="rating.${item.key.name}.name"/> <c:if test="${item.key.type.name == 'TIME'}">(dd/mm/yyyy)</c:if> &nbsp;<em><spring:message code="rating.${item.key.name}.description"/></em></td>
+		    	<td><c:if test="${!empty item.key.sum}"><h5></c:if><spring:message code="rating.${item.key.name}.name"/> <c:if test="${item.key.type.name == 'TIME'}">(dd/mm/yyyy)</c:if> &nbsp;<em><spring:message code="rating.${item.key.name}.description"/></em><c:if test="${!empty item.key.sum}"></h5></c:if></td>
 		 		  <c:forEach var="year" items="${years}" varStatus="statusYears">
 		 		  	<td>
 				     <c:choose>
@@ -47,7 +48,7 @@
 							</select>
 						  </c:when>
 						  <c:otherwise>
-							<input id="<c:out value="${item.key.name}_${year}" />" data-name="<c:out value="${item.key.name}" />" <c:if test="${!empty item.key.sum}">data-sum="<c:out value="${item.key.sum}" />" disabled="disabled"</c:if>type="text" data-year="<c:out value="${year}" />" data-validation="<c:out value="${item.key.validation}" />" value="<c:out value="${item.value.values[year].value}" />" name="<c:out value="properties['${item.key.name}'][${year}]" />" <c:if test="${item.key.type.name == 'TIME'}">class="datePicker"</c:if>/>
+							<input id="<c:out value="${item.key.name}_${year}" />" data-name="<c:out value="${item.key.name}" />" <c:if test="${!empty item.key.sum}">data-sum="<c:out value="${item.key.sum}" />" readonly="readonly"</c:if>type="text" data-year="<c:out value="${year}" />" data-validation="<c:out value="${item.key.validation}" />" value="<c:out value="${item.value.values[year].value}" />" name="<c:out value="properties['${item.key.name}'][${year}]" />" <c:if test="${item.key.type.name == 'TIME'}">class="datePicker"</c:if>/>
 						  </c:otherwise>
 					</c:choose>
 					</td>
