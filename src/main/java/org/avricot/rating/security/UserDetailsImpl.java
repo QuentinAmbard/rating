@@ -120,4 +120,7 @@ public final class UserDetailsImpl implements UserDetails {
         return user;
     }
 
+    public String getSalt() {
+        return user.getSalt();
+    }
 }

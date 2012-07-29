@@ -29,8 +29,8 @@ public class User extends DefaultObject implements Serializable, Principal {
     @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "USERNAME")
-    private String username;
+    @Column(name = "FIRSTNAME")
+    private String firstname;
 
     @Column(name = "LASTNAME")
     private String lastname;
@@ -40,6 +40,9 @@ public class User extends DefaultObject implements Serializable, Principal {
 
     @Column(name = "PASSWORD", nullable = false)
     private String password;
+
+    @Column(name = "SALT", nullable = false)
+    private String salt;
 
     @Column(name = "ACCOUNT_NON_EXPIRED")
     private boolean accountNonExpired = true;
@@ -169,12 +172,12 @@ public class User extends DefaultObject implements Serializable, Principal {
         this.lastConnectionDate = lastConnectionDate;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setUsername(final String username) {
-        this.username = username;
+    public void setFirstname(final String username) {
+        this.firstname = username;
     }
 
     public String getLastname() {
@@ -184,4 +187,13 @@ public class User extends DefaultObject implements Serializable, Principal {
     public void setLastname(final String lastname) {
         this.lastname = lastname;
     }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(final String salt) {
+        this.salt = salt;
+    }
+
 }

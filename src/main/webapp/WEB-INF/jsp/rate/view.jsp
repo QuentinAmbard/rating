@@ -1,6 +1,10 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 <script type="text/javascript">
 	$(document).ready(function () {
+		$('._deleteCompany').click(function () {
+			$('#myModal').modal('show');
+			$('#deleteButton').attr("href", $(this).attr("data-href"));
+		})
 	});
 </script>
 
@@ -36,11 +40,26 @@
 	      <td><c:out value="${company.score}"/></td>
 	      <td><a class="btn btn-primary" href="<c:url value="/rate/add/${company.id}"/>"><i class="icon-pencil"></i> Edit</a> 
 	      <a class="btn btn-success" href="<c:url value="/rate/show/${company.id}"/>"><i class="icon-eye-open"></i> View details</a> 
-	      <a class="btn btn-danger" href="<c:url value="/rate/delete/${company.id}"/>"><i class="icon-trash"></i>Delete</a></td>
+<%-- 	      </td> --%>
+ 	      <span data-href="<c:url value="/rate/delete/${company.id}"/>" class="_deleteCompany btn btn-danger"><i class="icon-trash"></i>Delete</span></td> 
 	    </tr>
 	</c:forEach>
   </tbody>
 </table>
 
+
+<div class="modal hide" id="myModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Company suppression</h3>
+  </div>
+  <div class="modal-body">
+    <p>Do you really want to delete this company ? All data will be lost.</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+    <a id="deleteButton" class="btn btn-danger" href="">Delete</a>
+  </div>
+</div>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>

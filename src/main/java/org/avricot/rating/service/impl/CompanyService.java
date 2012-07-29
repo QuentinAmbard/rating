@@ -1,5 +1,6 @@
 package org.avricot.rating.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,12 +14,14 @@ import org.avricot.rating.model.company.EditionStep;
 import org.avricot.rating.model.rating.RatingProperty;
 import org.avricot.rating.model.rating.RatingPropertyValue;
 import org.avricot.rating.model.rating.RatingType;
+import org.avricot.rating.model.rating.Result;
 import org.avricot.rating.model.rating.Type;
 import org.avricot.rating.model.user.User;
 import org.avricot.rating.repository.company.CompanyRepository;
 import org.avricot.rating.repository.rating.RatingPropertyRepository;
 import org.avricot.rating.repository.rating.RatingPropertyValueRepository;
 import org.avricot.rating.repository.rating.RatingTypeRepository;
+import org.avricot.rating.repository.result.ResultRepository;
 import org.avricot.rating.security.SecurityUtils;
 import org.avricot.rating.security.UnauthorizedException;
 import org.avricot.rating.service.CompanyAndRatingProperties;
@@ -45,7 +48,9 @@ public class CompanyService implements ICompanyService {
     @Inject
     private RatingPropertyRepository ratingPropertyRepository;
     @Inject
-    private IRulesService<Map<String, ?>> rulesService;
+    private IRulesService<Map<String, Object>> rulesService;
+    @Inject
+    private ResultRepository resultRepository;
 
     @Override
     public Long updateCompany(final CompanyCommand command) {
@@ -122,13 +127,26 @@ public class CompanyService implements ICompanyService {
             if (e.getKey().getType() == Type.NUM) {
                 Calc calc = new Calc();
                 for (Entry<Integer, RatingPropertyValue> v : e.getValue().getValues().entrySet()) {
-                    calc.getValues().put(v.getKey(), v.getValue().getint());
+                    calc.getValues().put(v.getKey(), v.getValue().getFloat());
                 }
                 properties.put(e.getKey().getName(), calc);
             }
         }
-        Map<String, ?> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "prop", "company" }, new Object[] { properties, company });
-        return new CompanyReport();
+        Map<String, Object> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "prop", "company" }, new Object[] { properties, company });
+        // TODO pour les tests à enlever
+        result.put("PERCENT_CROI", new Calc());
+        result.put("CA", new Calc());
+        List<Result> resultTypes = resultRepository.findBySectorOrSectorIsNull(company.getSector());
+        Map<String, List<Result>> map = new LinkedHashMap<String, List<Result>>();
+        for (Result r : resultTypes) {
+            List<Result> rts = map.get(r.getMenu());
+            if (rts == null) {
+                rts = new ArrayList<Result>();
+            }
+            rts.add(r);
+            map.put(r.getMenu(), rts);
+        }
+        return new CompanyReport(company, map, result);
     }
 
     @Override
@@ -142,5 +160,11 @@ public class CompanyService implements ICompanyService {
     public List<Company> getCompanies(final CompanySearchCriterion criterion) {
         User currentUser = SecurityUtils.getCurrentUser();
         return companyRepository.search(currentUser.getId(), criterion);
+    }
+
+    @Override
+    public void deleteCompany(final Long companyId) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        companyRepository.delete(currentUser.getId(), companyId);
     }
 }

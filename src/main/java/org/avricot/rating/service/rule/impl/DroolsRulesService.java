@@ -25,7 +25,7 @@ public class DroolsRulesService<O> implements IRulesService<O> {
     }
 
     @Override
-    public O executeRules(final O result, final String resultName, final String[] golbalNames, final Object[] globalObjects, final Object... inputs) {
+    public O executeRules(final O result, final String resultName, final String[] golbalNames, final Object[] globalObjects, final Object... facts) {
         KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
         kbuilder.add(ResourceFactory.newClassPathResource(rulesUrl), ResourceType.DRL);
         if (kbuilder.hasErrors()) {
@@ -41,7 +41,7 @@ public class DroolsRulesService<O> implements IRulesService<O> {
             for (int i = 0; i < golbalNames.length; i++) {
                 session.setGlobal(golbalNames[i], globalObjects[i]);
             }
-            for (Object o : inputs) {
+            for (Object o : facts) {
                 session.insert(o);
             }
             session.insert("test");

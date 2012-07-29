@@ -1,10 +1,11 @@
 package org.avricot.rating.service.rule;
 
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class Calc {
-    private Map<Integer, Integer> values = new HashMapNullSafe();
+    private Map<Integer, Float> values = new HashMapNullSafe();
 
     public Calc div(final int value) {
         return mult(1 / value);
@@ -12,10 +13,10 @@ public class Calc {
 
     public Calc div(final Calc c) {
         Calc result = new Calc();
-        for (Entry<Integer, Integer> e : values.entrySet()) {
-            int value;
+        for (Entry<Integer, Float> e : values.entrySet()) {
+            Float value;
             if (c.getValues().get(e.getKey()) == 0L) {
-                value = 0;
+                value = 0F;
             } else {
                 value = e.getValue() / c.getValues().get(e.getKey());
             }
@@ -26,8 +27,8 @@ public class Calc {
 
     public Calc mult(final Calc c) {
         Calc result = new Calc();
-        for (Entry<Integer, Integer> e : values.entrySet()) {
-            int value = e.getValue() / c.getValues().get(e.getKey());
+        for (Entry<Integer, Float> e : values.entrySet()) {
+            Float value = e.getValue() / c.getValues().get(e.getKey());
             result.getValues().put(e.getKey(), value);
         }
         return result;
@@ -35,7 +36,7 @@ public class Calc {
 
     public Calc mult(final int value) {
         Calc result = new Calc();
-        for (Entry<Integer, Integer> e : values.entrySet()) {
+        for (Entry<Integer, Float> e : values.entrySet()) {
             result.getValues().put(e.getKey(), e.getValue() * value);
         }
         return result;
@@ -43,8 +44,8 @@ public class Calc {
 
     public Calc sub(final Calc c) {
         Calc result = new Calc();
-        for (Entry<Integer, Integer> e : values.entrySet()) {
-            int value = e.getValue() - c.getValues().get(e.getKey());
+        for (Entry<Integer, Float> e : values.entrySet()) {
+            Float value = e.getValue() - c.getValues().get(e.getKey());
             result.getValues().put(e.getKey(), value);
         }
         return result;
@@ -52,7 +53,7 @@ public class Calc {
 
     public Calc plus(final int value) {
         Calc result = new Calc();
-        for (Entry<Integer, Integer> e : values.entrySet()) {
+        for (Entry<Integer, Float> e : values.entrySet()) {
             result.getValues().put(e.getKey(), e.getValue() + value);
         }
         return result;
@@ -64,19 +65,36 @@ public class Calc {
 
     public Calc plus(final Calc c) {
         Calc result = new Calc();
-        for (Entry<Integer, Integer> e : values.entrySet()) {
-            int value = e.getValue() + c.getValues().get(e.getKey());
+        for (Entry<Integer, Float> e : values.entrySet()) {
+            Float value = e.getValue() + c.getValues().get(e.getKey());
             result.getValues().put(e.getKey(), value);
         }
         return result;
     }
 
-    public Map<Integer, Integer> getValues() {
+    public Float avg(final Integer yearsNumber) {
+        Float result = 0F;
+        Integer currentYear = getCurrentYear();
+        for (int i = currentYear; i < currentYear - yearsNumber; i--) {
+            result += values.get(i);
+        }
+        return 100 * result / yearsNumber;
+    }
+
+    private Integer getCurrentYear() {
+        return Calendar.getInstance().get(Calendar.YEAR);
+    }
+
+    public Map<Integer, Float> getValues() {
         return values;
     }
 
-    public void setValues(final Map<Integer, Integer> values) {
+    public void setValues(final Map<Integer, Float> values) {
         this.values = values;
+    }
+
+    public Float getYear(final Integer year) {
+        return values.get(year);
     }
 
     @Override

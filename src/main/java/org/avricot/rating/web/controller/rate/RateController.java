@@ -13,6 +13,8 @@ import javax.validation.Valid;
 import org.avricot.rating.model.company.Company;
 import org.avricot.rating.model.company.EditionStep;
 import org.avricot.rating.model.company.Sector;
+import org.avricot.rating.model.user.User;
+import org.avricot.rating.security.SecurityUtils;
 import org.avricot.rating.service.CompanyAndRatingProperties;
 import org.avricot.rating.service.CompanyCommand;
 import org.avricot.rating.service.CompanyReport;
@@ -32,6 +34,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/rate")
 public class RateController {
+    @ModelAttribute("user")
+    public User getUser() {
+        return SecurityUtils.getCurrentUser();
+    }
+
     @Inject
     ICompanyService companyService;
 
@@ -100,17 +107,17 @@ public class RateController {
             return "redirect:/rate/home";
         }
         CompanyAndRatingProperties data = companyService.getRatingProperties(es, companyId);
-        Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        List<Integer> years = new ArrayList<Integer>();
-        for (int i = 0; i < data.getCompany().getYearNumber(); i++) {
-            years.add(currentYear - i);
-        }
-        model.addAttribute("years", years);
-        // new int[] { 2, 1, 0 }
-        model.addAttribute("currentYear", currentYear);
+
+        addYears(model, data.getCompany());
         model.addAttribute("data", data);
         model.addAttribute("step", es);
         return "rate/edit";
+    }
+
+    @RequestMapping(value = "/delete/{companyId}", method = RequestMethod.GET)
+    public String delete(final Model model, @PathVariable final Long companyId) {
+        companyService.deleteCompany(companyId);
+        return "redirect:/rate/view";
     }
 
     @RequestMapping(value = "/view", method = RequestMethod.GET)
@@ -129,9 +136,19 @@ public class RateController {
 
     @RequestMapping(value = "/show/{companyId}", method = RequestMethod.GET)
     public String show(final Model model, @PathVariable final Long companyId) throws ParseException {
-        CompanyReport companies = companyService.getCompanyReport(companyId);
-        model.addAttribute("companies", companies);
+        CompanyReport report = companyService.getCompanyReport(companyId);
+        model.addAttribute("report", report);
+        addYears(model, report.getCompany());
         return "rate/show";
     }
 
+    private void addYears(final Model model, final Company company) {
+        Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        List<Integer> years = new ArrayList<Integer>();
+        for (int i = 0; i < company.getYearNumber(); i++) {
+            years.add(currentYear - i);
+        }
+        model.addAttribute("years", years);
+        model.addAttribute("currentYear", currentYear);
+    }
 }

@@ -35,6 +35,7 @@
 	<sec:http access-denied-page="/errors/403"  auto-config="false" >
 		<sec:intercept-url pattern="/admin/**" access="ROLE_SUPER_ADMIN" />
 		<sec:intercept-url pattern="/rate/**" access="ROLE_USER" />
+		<sec:intercept-url pattern="/profile/**" access="ROLE_USER" />
 		<sec:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER" />
 		<sec:anonymous username="anonymousUser" granted-authority="ROLE_ANONYMOUS" />
 
@@ -60,10 +61,14 @@
 	<sec:authentication-manager>
 		<sec:authentication-provider user-service-ref="userDetailsServiceImpl">
 			<sec:password-encoder ref="passwordEncoder">
-				<!-- <sec:salt-source user-property="username" /> -->
+				<sec:salt-source ref="saltSource" /> 
 			</sec:password-encoder>
 		</sec:authentication-provider>
 	</sec:authentication-manager>
+
+	<bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+	     <property name="userPropertyToUse" value="salt"/>
+	</bean>    
 	
 	<bean id="passwordEncoder" name="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
 </beans>

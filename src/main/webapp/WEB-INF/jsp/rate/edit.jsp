@@ -27,11 +27,12 @@
 	  </thead>
 	  <tbody>
 		  <c:forEach var="item" items="${data.properties}">
-			  	<c:if test="${!empty item.key.subMenu}">
-				  	<tr>
-				  		<td colspan="<c:out value="${fn:length(years)+1}"/>"><h4><spring:message code="submenu.${item.key.subMenu}"/></h4></td>
-				    <tr>
-			    </c:if>
+		  	<c:if test="${!empty item.key.subMenu}">
+			  	<tr>
+			  		<td colspan="<c:out value="${fn:length(years)+1}"/>"><h4><spring:message code="submenu.${item.key.subMenu}"/></h4></td>
+			    </tr>
+		    </c:if>
+		  	<tr>
 		    	<td><spring:message code="rating.${item.key.name}.name"/> <c:if test="${item.key.type.name == 'TIME'}">(dd/mm/yyyy)</c:if> &nbsp;<em><spring:message code="rating.${item.key.name}.description"/></em></td>
 		 		  <c:forEach var="year" items="${years}" varStatus="statusYears">
 		 		  	<td>

@@ -70,14 +70,14 @@ public class RatingPropertyValue extends DefaultObject {
         return "RatingPropertyValue [property=" + property + ", value=" + value + ", year=" + year + "]";
     }
 
-    public Integer getint() {
+    public Float getFloat() {
         if (value == null) {
-            return 0;
+            return 0F;
         }
         try {
-            return Integer.valueOf(value);
+            return Float.valueOf(value);
         } catch (NumberFormatException e) {
-            return 0;
+            return 0F;
         }
     }
 

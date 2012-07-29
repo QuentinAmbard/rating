@@ -7,21 +7,16 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.avricot.rating.model.DefaultObject;
-import org.avricot.rating.model.company.EditionStep;
 import org.avricot.rating.model.company.Sector;
 
 @Entity
-@Table(name = "RATING_TYPE")
-public class RatingType extends DefaultObject {
+@Table(name = "RESULT")
+public class Result extends DefaultObject {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "SECTOR")
     @Enumerated(EnumType.STRING)
     private Sector sector;
-
-    @Column(name = "STEP")
-    @Enumerated(EnumType.STRING)
-    private EditionStep step;
 
     @Column(name = "NAME")
     private String name;
@@ -30,31 +25,20 @@ public class RatingType extends DefaultObject {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @Column(name = "DEFAULT_VALUE")
-    private String defaultValue;
-
-    @Column(name = "VALIDATION")
-    private String validation;
-
     @Column(name = "SUB_MENU")
     private String subMenu;
+
+    @Column(name = "MENU")
+    private String menu;
+
+    @Column(name = "H_LEVEL")
+    private String hLevel;
 
     @Column(name = "ORDER")
     private int order;
 
     @Column(name = "SUM")
     private String sum;
-
-    @Column(name = "HIDE")
-    private boolean hidden;
-
-    public EditionStep getStep() {
-        return step;
-    }
-
-    public void setStep(final EditionStep step) {
-        this.step = step;
-    }
 
     public String getName() {
         return name;
@@ -72,37 +56,12 @@ public class RatingType extends DefaultObject {
         this.type = type;
     }
 
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(final String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
-    public String[] getDropDownValues() {
-        return defaultValue.split("\\|");
-    }
-
     public Sector getSector() {
         return sector;
     }
 
     public void setSector(final Sector sector) {
         this.sector = sector;
-    }
-
-    @Override
-    public String toString() {
-        return "RatingType [sector=" + sector + ", step=" + step + ", name=" + name + ", type=" + type + ", defaultValue=" + defaultValue + "]";
-    }
-
-    public String getValidation() {
-        return validation;
-    }
-
-    public void setValidation(final String validation) {
-        this.validation = validation;
     }
 
     public String getSubMenu() {
@@ -129,11 +88,19 @@ public class RatingType extends DefaultObject {
         this.sum = sum;
     }
 
-    public boolean isHidden() {
-        return hidden;
+    public String gethLevel() {
+        return hLevel;
     }
 
-    public void setHidden(final boolean hidden) {
-        this.hidden = hidden;
+    public void sethLevel(final String hLevel) {
+        this.hLevel = hLevel;
+    }
+
+    public String getMenu() {
+        return menu;
+    }
+
+    public void setMenu(final String menu) {
+        this.menu = menu;
     }
 }

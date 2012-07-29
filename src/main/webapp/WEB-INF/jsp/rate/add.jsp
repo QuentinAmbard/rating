@@ -14,7 +14,7 @@
    <ul>
       <c:forEach var="error" items="${errors.allErrors}">
       	<div class="alert alert-error">
-	        <button type="button" class="close" data-dismiss="alert">×</button>
+	        <button type="button" class="close" data-dismiss="alert">x</button>
           	<spring:message code="${error.code}" arguments="${error.field}" />
          </div>
       </c:forEach>

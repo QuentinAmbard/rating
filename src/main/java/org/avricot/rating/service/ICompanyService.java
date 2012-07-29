@@ -20,4 +20,6 @@ public interface ICompanyService {
     List<Company> getCompanies(CompanySearchCriterion companySearchCommand);
 
     Company getCompanyForCurrentUser(Long companyId);
+
+    void deleteCompany(Long companyId);
 }
