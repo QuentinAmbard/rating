@@ -11,3 +11,11 @@ input.error {
 .rateHome .desc {
 	min-height: 70px;
 }
+
+#formAdd select {
+	width: 260px;
+}
+
+#formAdd input {
+	width: 250px;
+}

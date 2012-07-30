@@ -9,6 +9,8 @@ import org.avricot.rating.web.controller.rate.PropertyCommand;
 public interface ICompanyService {
     Long updateCompany(CompanyCommand command);
 
+    void updateCompany(ShareholderCommand command, Long companyId);
+
     CompanyAndRatingProperties getRatingProperties(EditionStep es, Long companyId);
 
     void updateRatingProperties(EditionStep es, Long companyId, PropertyCommand command);
@@ -21,5 +23,11 @@ public interface ICompanyService {
 
     Company getCompanyForCurrentUser(Long companyId);
 
+    Company getCompanyShareHolderForCurrentUser(Long companyId);
+
     void deleteCompany(Long companyId);
+
+    void updateCompany(ManagerCommand command, Long companyId);
+
+    Company getCompanyManagersForCurrentUser(Long companyId);
 }

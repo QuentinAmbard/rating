@@ -35,4 +35,5 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
         }
         return query.getResultList();
     }
+
 }

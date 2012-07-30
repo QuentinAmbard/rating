@@ -7,6 +7,7 @@
 			$('#next').val("false");
 			$('#formAdd').submit();
 		});
+		$('._popover').popover();
 	});
 </script>
 	
@@ -31,29 +32,48 @@
     <div class="row show-grid">
 	  <div class="span6">
 	    <div class="control-group">
-	      <label class="control-label" for="companyName">Company name *</label>
+	      <label class="control-label" for="annalistName">Annalist name *</label>
 	      <div class="controls">
-			<form:input path="name" cssClass="required"  cssErrorClass="error" />
+			<form:input path="annalistName" id="annalistName" cssClass="required"  cssErrorClass="error" />
 	      </div>
 	    </div>
 	    <div class="control-group">
-	      <label class="control-label" for="businessId">Identifier</label> <p class="help-block">enter the company identifier (rcs, siren etc.)</p>
+	      <label class="control-label" for="companyName">Company name *</label>
+	      <div class="controls">
+			<form:input path="name" id="companyName" cssClass="required"  cssErrorClass="error" />
+	      </div>
+	    </div>
+	    <div class="control-group">
+	      <label class="control-label" for="businessId">
+	      	<span class="_popover" rel="popover" data-content="Enter the company identifier (rcs, siren etc.)" data-original-title="Identifier">
+	      		Identifier <i class="icon-question-sign"></i>
+	      	</span>
+	      </label>
 	      <div class="controls">
 			<form:input path="businessId" id="businessId" cssErrorClass="error" />
 	      </div>
 	    </div>
 	    <div class="control-group">
-	      <label class="control-label" for="creationDate">Creation date (dd/mm/yyyy)</label>
+	      <label class="control-label" for="creationDate">Registration date (dd/mm/yyyy)</label>
 	      <div class="controls">
-			<form:input path="creationDate" id="creationDate" cssErrorClass="error" />
-	        <p class="help-block">enter the company registration date</p>
+			<form:input cssClass="required" path="creationDate" id="creationDate" cssErrorClass="error" />
+	      </div>
+	    </div>
+	    <div class="control-group">
+	      <label class="control-label" for="description">Company description</label>
+	      <div class="controls">
+			<form:textarea rows="7" cssStyle="width: 500px" path="description" id="description" cssErrorClass="error" ></form:textarea>
 	      </div>
 	    </div>
 	  </div>
 	  	  
 	  <div class="span6">
 	    <div class="control-group">
-		   <label class="control-label" for="sector">Select a sector</label>
+	      <label class="control-label" for="sector">
+	      	<span class="_popover" rel="popover" data-content="Select the sector of the company you want to rate" data-original-title="Sector">
+	      		Sector <i class="icon-question-sign"></i>
+	      	</span>
+	      </label>
 		   <div class="controls">
 		   <form:select id="sector" path="sector">
 			  <c:forEach var="lang" items="${sectors}">
@@ -65,14 +85,22 @@
 		   </div>
 		 </div>
 	  	 <div class="control-group">
-		   <label class="control-label" for="dayNumber">Number of days in the year</label>
+	      <label class="control-label" for="dayNumber">
+	      	<span class="_popover" rel="popover" data-content="The number of days in the year that will be used to rate the company." data-original-title="Numer of days">
+	      		Number of days in the year <i class="icon-question-sign"></i>
+	      	</span>
+	      </label>
 		   <div class="controls">
 			<form:input path="dayNumber" id="dayNumber" cssErrorClass="error" />
-	        <p class="help-block">The number of days in the year</p>
+	        <p class="help-block"></p>
 		   </div>
 		 </div>
 	    <div class="control-group">
-		   <label class="control-label" for="yearNumber">Number of years</label>
+	      <label class="control-label" for="dayNumber">
+	      	<span class="_popover" rel="popover" data-content="The number of years that will be used to rate the company." data-original-title="Number of years">
+	      		Number of years <i class="icon-question-sign"></i>
+	      	</span>
+	      </label>
 		   <div class="controls">
 		   <form:select id="yearNumber" path="yearNumber">
 			    <form:option value="1">1</form:option>
@@ -81,7 +109,6 @@
 			    <form:option value="4">4</form:option>
 			    <form:option value="5">5</form:option>
 			</form:select>
-	        <p class="help-block">The number of years you have data</p>
 		   </div>
 		 </div>
 	  </div>

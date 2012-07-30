@@ -17,4 +17,10 @@ public interface CompanyRepository extends CrudRepository<Company, Long>, Compan
     @Modifying
     @Query(value = "delete from Company c where c.user.id=?1 and c.id=?2 ")
     void delete(Long userId, Long companyId);
+
+    @Query(value = "select c from Company c left join fetch c.shareholders where c.id=?1 and c.user.id=?2")
+    Company getByIdAndUserIdFetchingShareholders(Long companyId, Long id);
+
+    @Query(value = "select c from Company c left join fetch c.managers where c.id=?1 and c.user.id=?2")
+    Company getByIdAndUserIdFetchingManagers(Long companyId, Long id);
 }

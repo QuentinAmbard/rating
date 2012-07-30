@@ -9,8 +9,9 @@ import org.avricot.rating.model.rating.RatingType;
 public class CompanyAndRatingProperties {
     private Company company;
     private Map<RatingType, RatingProperty> properties;
+    private boolean displayYear;
 
-    public CompanyAndRatingProperties(final Company company, final Map<RatingType, RatingProperty> properties) {
+    public CompanyAndRatingProperties(final Company company, final Map<RatingType, RatingProperty> properties, final boolean displayYear) {
         this.company = company;
         this.properties = properties;
     }
@@ -29,5 +30,13 @@ public class CompanyAndRatingProperties {
 
     public void setProperties(final Map<RatingType, RatingProperty> properties) {
         this.properties = properties;
+    }
+
+    public boolean isDisplayYear() {
+        return displayYear;
+    }
+
+    public void setDisplayYear(final boolean displayYear) {
+        this.displayYear = displayYear;
     }
 }

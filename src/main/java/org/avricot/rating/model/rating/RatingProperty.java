@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -31,6 +32,9 @@ public class RatingProperty extends DefaultObject {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RATING_TYPE_ID")
     private RatingType type;
+
+    @Column(name = "GLOBAL_VALUE")
+    private Integer globalValue;
 
     public RatingProperty() {
 
@@ -67,7 +71,15 @@ public class RatingProperty extends DefaultObject {
 
     @Override
     public String toString() {
-        return "RatingProperty [company=" + company + ", type=" + type + "]";
+        return "RatingProperty [company=" + company + ", type=" + type + ", globalValue=" + globalValue + "]";
+    }
+
+    public Integer getGlobalValue() {
+        return globalValue;
+    }
+
+    public void setGlobalValue(final Integer globalValue) {
+        this.globalValue = globalValue;
     }
 
 }

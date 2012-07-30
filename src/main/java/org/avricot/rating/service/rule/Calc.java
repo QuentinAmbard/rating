@@ -90,10 +90,10 @@ public class Calc {
         return result / yearsNumber;
     }
 
-    public Calc growth(final Calc c) {
+    public Calc growth() {
         Calc result = new Calc();
         for (Entry<Integer, Float> e : values.entrySet()) {
-            Float previousValue = c.getValues().get(e.getKey() - 1);
+            Float previousValue = values.get(e.getKey() - 1);
             Float value;
             if (previousValue == 0F) {
                 value = 0F;

@@ -20,6 +20,8 @@ import org.avricot.rating.service.CompanyCommand;
 import org.avricot.rating.service.CompanyReport;
 import org.avricot.rating.service.CompanySearchCriterion;
 import org.avricot.rating.service.ICompanyService;
+import org.avricot.rating.service.ManagerCommand;
+import org.avricot.rating.service.ShareholderCommand;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,7 +58,7 @@ public class RateController {
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String toAdd(final Model model) {
-        model.addAttribute("command", new Company());
+        model.addAttribute("command", new CompanyCommand());
         model.addAttribute("sectors", Sector.values());
         return "rate/add";
     }
@@ -76,9 +78,41 @@ public class RateController {
         }
         Long companyId = companyService.updateCompany(command);
         if (command.isNext()) {
-            return "redirect:/rate/edit/" + companyId + "/0";
+            return "redirect:/rate/shareholder/" + companyId;
         }
         return "redirect:/rate/add/" + companyId;
+    }
+
+    @RequestMapping(value = "/shareholder/{companyId}", method = RequestMethod.GET)
+    public String shareHolder(final Model model, @PathVariable final Long companyId) {
+        Company company = companyService.getCompanyShareHolderForCurrentUser(companyId);
+        model.addAttribute("command", new ShareholderCommand(company));
+        return "/rate/shareholder";
+    }
+
+    @RequestMapping(value = "/shareholder/{companyId}", method = RequestMethod.POST)
+    public String shareHolder(final Model model, @PathVariable final Long companyId, @Valid @ModelAttribute("command") final ShareholderCommand command, final BindingResult result) {
+        companyService.updateCompany(command, companyId);
+        if (command.isNext()) {
+            return "redirect:/rate/manager/" + companyId;
+        }
+        return "redirect:/rate/shareholder/" + companyId;
+    }
+
+    @RequestMapping(value = "/manager/{companyId}", method = RequestMethod.GET)
+    public String manager(final Model model, @PathVariable final Long companyId) {
+        Company company = companyService.getCompanyManagersForCurrentUser(companyId);
+        model.addAttribute("command", new ManagerCommand(company));
+        return "/rate/manager";
+    }
+
+    @RequestMapping(value = "/manager/{companyId}", method = RequestMethod.POST)
+    public String manager(final Model model, @PathVariable final Long companyId, @Valid @ModelAttribute("command") final ManagerCommand command, final BindingResult result) {
+        companyService.updateCompany(command, companyId);
+        if (command.isNext()) {
+            return "redirect:/rate/edit/" + companyId + "/0";
+        }
+        return "redirect:/rate/manager/" + companyId;
     }
 
     @RequestMapping(value = "/edit/{companyId}/{step}", method = RequestMethod.POST)
@@ -107,7 +141,6 @@ public class RateController {
             return "redirect:/rate/home";
         }
         CompanyAndRatingProperties data = companyService.getRatingProperties(es, companyId);
-
         addYears(model, data.getCompany());
         model.addAttribute("data", data);
         model.addAttribute("step", es);

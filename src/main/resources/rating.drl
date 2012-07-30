@@ -39,6 +39,68 @@ then
 	
 	result.put("RCF", get(result, "FFO").minus(get(prop, "CASH_DIVIDEND_PAID")));
 	result.put("RCF_OVER_NET_DEBT", get(result, "RCF").div(get(result, "NET_DEBT")));
+	
+	
+	result.put("REVENUES_AVG2", get(prop, "INCOME_SALES").avg(2));#moyenne sur année N et N-1 du CA
+	result.put("FIXED_ASSETS", get(prop, "BALANCE_FIXED_ASSETS"));#recupere la valeur du fixed assets (non current) sur annee N
+	
+	result.put("SALES_GROWTH", get(prop, "INCOME_SALES").growth());
+	result.put("GROSS_MARGIN", get(prop, "INCOME_SALES").minus(get(prop, "INCOME_COGS")));
+	result.put("GROSS_MARGIN_PERCENT", get(result, "GROSS_MARGIN").div(get(prop, "INCOME_SALES")).mult(100));
+	result.put("EBITDA_MARGIN_PERCENT", get(prop, "INCOME_EBITDA").div(get(prop, "INCOME_SALES")).mult(100));
+	result.put("EBIT_MARGIN_PERCENT", get(prop, "INCOME_EBIT").div(get(prop, "INCOME_SALES")).mult(100));
+	result.put("NET_INCOME_PERCENT", get(prop, "INCOME_NET_INCOME").div(get(prop, "INCOME_SALES")).mult(100));
+	
+	result.put("WORKING_CAPITAL", get(prop, "BALANCE_STOCKS_WIP").plus(get(prop, "BALANCE_RECEIVABLES")).minus(get(prop, "BALANCE_PAYABLES")));
+	result.put("WORKING_CAPITAL_PERCENT", get(result, "WORKING_CAPITAL").div(get(prop, "INCOME_SALES")).mult(100));
+	result.put("WORKING_CAPITAL_DAYS", get(result, "WORKING_CAPITAL").mult(company.getDayNumber()).div(get(prop, "INCOME_SALES")));
+	
+	result.put("INVENTORIES_DAYS", get(result, "BALANCE_STOCKS_WIP").mult(company.getDayNumber()).div(get(prop, "INCOME_SALES")));
+	result.put("RECEIVABLES_DAYS", get(result, "BALANCE_RECEIVABLES").mult(company.getDayNumber()).div(get(prop, "INCOME_SALES")));
+	result.put("PAYABLES_DAYS", get(result, "BALANCE_PAYABLES").mult(company.getDayNumber()).div(get(prop, "INCOME_SALES")));
+	
+	result.put("TOTAL_DEBT", get(prop, "BALANCE_LONG_TERM_DEBT").plus(get(prop, "BALANCE_SHORT_TERM_DEBT")));
+	result.put("NET_DEBT", get(result, "TOTAL_DEBT").minus(get(prop, "BALANCE_CASH_EQUI")));
+	result.put("TOTAL_DEBT_OVER_EBITDA", get(result, "TOTAL_DEBT").div(get(prop, "INCOME_EBITDA")));
+	result.put("NET_DEBT_OVER_EBITDA", get(result, "NET_DEBT").div(get(prop, "INCOME_EBITDA")));
+	result.put("NET_DEBT_OVER_EBITDA_AVG2", get(result, "NET_DEBT_OVER_EBITDA").avg(2));
+	result.put("EBIT_OVER_INTEREST", get(prop, "INCOME_EBIT").div(get(prop, "INCOME_NET_INTEREST")));
+	result.put("TOTAL_DEBT_OVER_EQUITY", get(result, "TOTAL_DEBT").div(get(prop, "BALANCE_EQUITY")).mult(100));
+	result.put("TOTAL_DEBT_OVER_TOTAL_DEBT_OVER_EQUITY_INTERMEDIAIRE", get(result, "TOTAL_DEBT").plus(get(prop, "BALANCE_EQUITY")));
+	result.put("TOTAL_DEBT_OVER_TOTAL_DEBT_OVER_EQUITY", get(result, "TOTAL_DEBT").div(get(result, "TOTAL_DEBT_OVER_TOTAL_DEBT_OVER_EQUITY_INTERMEDIAIRE")).mult(100));
+	
+	result.put("FFO", get(prop, "CASH_FFO"));
+	result.put("FFO_OVER_NET_DEBT", get(result, "FFO").div(get(result, "NET_DEBT")).mult(100));
+	result.put("FFO_OVER_TOTAL_DEBT", get(result, "FFO").div(get(result, "TOTAL_DEBT")).mult(100));
+	
+	result.put("RCF", get(result, "FFO").minus(get(prop, "CASH_DIVIDEND_PAID")));
+	result.put("RCF_OVER_TOTAL_DEBT", get(result, "RCF").div(get(result, "TOTAL_DEBT")).mult(100));
+	result.put("RCF_OVER_NET_DEBT", get(result, "RCF").div(get(result, "NET_DEBT")).mult(100));
+	
+	result.put("FCF", get(prop, "CASH_FCF"));
+	result.put("FCF_ADJUSTED", get(result, "FCF").minus(get(prop, "CASH_DIVIDEND_PAID")));
+	result.put("FCF_OVER_TOTAL_DEBT", get(result, "FCF").div(get(result, "TOTAL_DEBT")).mult(100));
+	result.put("FCF_OVER_NET_DEBT", get(result, "FCF").div(get(result, "NET_DEBT")).mult(100));
+	result.put("FCF_ADJUSTED_OVER_TOTAL_DEBT", get(result, "FCF_ADJUSTED").div(get(result, "TOTAL_DEBT")).mult(100));
+	result.put("FCF_ADJUSTED_OVER_NET_DEBT", get(result, "FCF_ADJUSTED").div(get(result, "NET_DEBT")).mult(100));
+	
+	result.put("CASH_OVER_TOTAL_ASSETS", get(prop, "BALANCE_CASH_EQUI").div(get(prop, "BALANCE_TOTAL_ASSETS")).mult(100));
+	result.put("CASH_OVER_FIXED_ASSETS", get(prop, "BALANCE_CASH_EQUI").div(get(prop, "BALANCE_FIXED_ASSETS")).mult(100));
+	
+	result.put("ROA", get(prop, "INCOME_NET_INCOME").div(get(prop, "BALANCE_TOTAL_ASSETS")).mult(100));
+	result.put("ROE", get(prop, "INCOME_NET_INCOME").div(get(prop, "BALANCE_EQUITY")).mult(100));
+	
+	result.put("SALES", get(prop, "INCOME_SALES"));
+	result.put("EBITDA", get(prop, "INCOME_EBITDA"));
+	result.put("EBIT", get(prop, "INCOME_EBIT"));
+	result.put("INTEREST", get(prop, "INCOME_NET_INTEREST"));
+	result.put("NET_INCOME", get(prop, "INCOME_NET_INCOME"));
+	result.put("CURRENT_RATIO", get(prop, "INCOME_NET_INCOME"));
+	result.put("CASH_EQUI", get(prop, "BALANCE_CASH_EQUI"));
+	result.put("EQUITY", get(prop, "BALANCE_EQUITY"));
+	result.put("CURRENT_RATIO", get(prop, "BALANCE_CURRENT_ASSETS").div(get(prop, "BALANCE_CURRENT_LIABILITIES")));
+	result.put("QUICK_RATIO", get(prop, "BALANCE_CURRENT_ASSETS").minus(get(prop, "BALANCE_STOCKS_WIP")).div(get(prop, "BALANCE_CURRENT_LIABILITIES")));
+	result.put("ACID_TEST", get(prop, "BALANCE_CASH_EQUI").div(get(prop, "BALANCE_CURRENT_LIABILITIES")));		
 
 end
 

@@ -2,8 +2,11 @@ package org.avricot.rating.model.company;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,7 +39,6 @@ public class Company extends DefaultObject {
     @Column(name = "ANNALISTE_NAME")
     private String annalistName;
 
-    @NotEmpty
     @Column(name = "DESCRIPTION")
     private String description;
 
@@ -46,10 +48,10 @@ public class Company extends DefaultObject {
     private User user;
 
     @Column(name = "DAY_NUMBER")
-    private long dayNumber = 365;
+    private int dayNumber = 365;
 
     @Column(name = "YEAR_NUMBER")
-    private long yearNumber = 3;
+    private int yearNumber = 3;
 
     @Column(name = "BUSINESS_ID")
     private String businessId;
@@ -68,6 +70,12 @@ public class Company extends DefaultObject {
 
     @Column(name = "SCORE")
     private Float score;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private Set<ShareHolder> shareholders = new HashSet<ShareHolder>();
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private Set<Manager> managers = new HashSet<Manager>();
 
     public Company() {
 
@@ -129,19 +137,19 @@ public class Company extends DefaultObject {
         this.user = user;
     }
 
-    public long getDayNumber() {
+    public int getDayNumber() {
         return dayNumber;
     }
 
-    public void setDayNumber(final long dayNumber) {
+    public void setDayNumber(final int dayNumber) {
         this.dayNumber = dayNumber;
     }
 
-    public long getYearNumber() {
+    public int getYearNumber() {
         return yearNumber;
     }
 
-    public void setYearNumber(final long yearNumber) {
+    public void setYearNumber(final int yearNumber) {
         this.yearNumber = yearNumber;
     }
 
@@ -167,6 +175,22 @@ public class Company extends DefaultObject {
 
     public void setDescription(final String description) {
         this.description = description;
+    }
+
+    public Set<ShareHolder> getShareholders() {
+        return shareholders;
+    }
+
+    public void setShareholders(final Set<ShareHolder> shareHolders) {
+        this.shareholders = shareHolders;
+    }
+
+    public Set<Manager> getManagers() {
+        return managers;
+    }
+
+    public void setManagers(final Set<Manager> managers) {
+        this.managers = managers;
     }
 
 }

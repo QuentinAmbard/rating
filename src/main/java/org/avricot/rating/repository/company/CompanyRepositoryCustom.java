@@ -7,4 +7,5 @@ import org.avricot.rating.service.CompanySearchCriterion;
 
 public interface CompanyRepositoryCustom {
     List<Company> search(Long userId, CompanySearchCriterion criterion);
+
 }

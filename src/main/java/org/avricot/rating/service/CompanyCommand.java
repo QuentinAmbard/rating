@@ -11,11 +11,14 @@ public class CompanyCommand {
     private boolean next = true;
     @NotEmpty
     private String name;
+    @NotEmpty
+    private String annalistName;
+    private String description;
     private String businessId;
     private Date creationDate;
     private Sector sector;
-    private long dayNumber;
-    private long yearNumber;
+    private int dayNumber;
+    private int yearNumber;
 
     public CompanyCommand() {
 
@@ -24,6 +27,8 @@ public class CompanyCommand {
     public CompanyCommand(final Company company) {
         id = company.getId();
         name = company.getName();
+        description = company.getDescription();
+        annalistName = company.getAnnalistName();
         businessId = company.getBusinessId();
         creationDate = company.getCreationDate();
         sector = company.getSector();
@@ -63,19 +68,19 @@ public class CompanyCommand {
         this.sector = sector;
     }
 
-    public long getDayNumber() {
+    public int getDayNumber() {
         return dayNumber;
     }
 
-    public void setDayNumber(final long dayNumber) {
+    public void setDayNumber(final int dayNumber) {
         this.dayNumber = dayNumber;
     }
 
-    public long getYearNumber() {
+    public int getYearNumber() {
         return yearNumber;
     }
 
-    public void setYearNumber(final long yearNumber) {
+    public void setYearNumber(final int yearNumber) {
         this.yearNumber = yearNumber;
     }
 
@@ -93,5 +98,21 @@ public class CompanyCommand {
 
     public void setNext(final boolean next) {
         this.next = next;
+    }
+
+    public String getAnnalistName() {
+        return annalistName;
+    }
+
+    public void setAnnalistName(final String annalistName) {
+        this.annalistName = annalistName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
     }
 }

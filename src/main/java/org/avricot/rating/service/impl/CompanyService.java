@@ -11,6 +11,8 @@ import javax.inject.Inject;
 
 import org.avricot.rating.model.company.Company;
 import org.avricot.rating.model.company.EditionStep;
+import org.avricot.rating.model.company.Manager;
+import org.avricot.rating.model.company.ShareHolder;
 import org.avricot.rating.model.rating.RatingProperty;
 import org.avricot.rating.model.rating.RatingPropertyValue;
 import org.avricot.rating.model.rating.RatingType;
@@ -18,10 +20,11 @@ import org.avricot.rating.model.rating.Result;
 import org.avricot.rating.model.rating.Type;
 import org.avricot.rating.model.user.User;
 import org.avricot.rating.repository.company.CompanyRepository;
+import org.avricot.rating.repository.manager.ManagerRepository;
 import org.avricot.rating.repository.rating.RatingPropertyRepository;
-import org.avricot.rating.repository.rating.RatingPropertyValueRepository;
 import org.avricot.rating.repository.rating.RatingTypeRepository;
 import org.avricot.rating.repository.result.ResultRepository;
+import org.avricot.rating.repository.shareholder.ShareholderRepository;
 import org.avricot.rating.security.SecurityUtils;
 import org.avricot.rating.security.UnauthorizedException;
 import org.avricot.rating.service.CompanyAndRatingProperties;
@@ -29,9 +32,14 @@ import org.avricot.rating.service.CompanyCommand;
 import org.avricot.rating.service.CompanyReport;
 import org.avricot.rating.service.CompanySearchCriterion;
 import org.avricot.rating.service.ICompanyService;
+import org.avricot.rating.service.ManagerCommand;
+import org.avricot.rating.service.ManagerCommand.MCommand;
+import org.avricot.rating.service.ShareholderCommand;
+import org.avricot.rating.service.ShareholderCommand.SHCommand;
 import org.avricot.rating.service.rule.Calc;
 import org.avricot.rating.service.rule.IRulesService;
 import org.avricot.rating.web.controller.rate.PropertyCommand;
+import org.avricot.rating.web.controller.rate.PropertyCommand.MapProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +52,9 @@ public class CompanyService implements ICompanyService {
     @Inject
     private RatingTypeRepository ratingTypeRepository;
     @Inject
-    private RatingPropertyValueRepository ratingPropertyValueRepository;
+    private ShareholderRepository shareholderRepository;
+    @Inject
+    private ManagerRepository managerRepository;
     @Inject
     private RatingPropertyRepository ratingPropertyRepository;
     @Inject
@@ -61,6 +71,8 @@ public class CompanyService implements ICompanyService {
             company = new Company(SecurityUtils.getCurrentUser());
         }
         company.setName(command.getName());
+        company.setAnnalistName(command.getAnnalistName());
+        company.setDescription(command.getDescription());
         company.setCreationDate(command.getCreationDate());
         company.setBusinessId(command.getBusinessId());
         company.setDayNumber(command.getDayNumber());
@@ -75,8 +87,12 @@ public class CompanyService implements ICompanyService {
         Company company = getCompanyForCurrentUser(companyId);
         // All entries
         List<RatingType> ratingTypes = ratingTypeRepository.findByStepAndSectorOrSectorIsNull(es, company.getSector());
+        boolean displayYear = false;
         Map<RatingType, RatingProperty> properties = new LinkedHashMap<RatingType, RatingProperty>();
         for (RatingType type : ratingTypes) {
+            if (!type.isGlobal() || type.getType() != Type.RADIO) {
+                displayYear = true;
+            }
             properties.put(type, null);
         }
         for (Entry<RatingType, RatingProperty> e : company.getProperties().entrySet()) {
@@ -84,25 +100,29 @@ public class CompanyService implements ICompanyService {
                 properties.put(e.getKey(), e.getValue());
             }
         }
-        return new CompanyAndRatingProperties(company, properties);
+        return new CompanyAndRatingProperties(company, properties, displayYear);
     }
 
     @Override
     public void updateRatingProperties(final EditionStep es, final Long companyId, final PropertyCommand command) {
         Company company = getCompanyForCurrentUser(companyId);
-        for (Entry<String, Map<Integer, String>> e : command.getProperties().entrySet()) {
+        for (Entry<String, MapProperties> e : command.getProperties().entrySet()) {
             RatingType ratingType = ratingTypeRepository.findByNameAndStep(e.getKey(), es);
             RatingProperty property = company.getProperties().get(ratingType);
             if (property == null) {
                 property = new RatingProperty(company, ratingType);
             }
-            for (Entry<Integer, String> values : e.getValue().entrySet()) {
-                RatingPropertyValue propertyValue = property.getValues().get(values.getKey());
-                if (propertyValue == null) {
-                    propertyValue = new RatingPropertyValue(property, values.getKey());
+            if (property.getType().isGlobal()) {
+                property.setGlobalValue(e.getValue().getGlobalValue());
+            } else {
+                for (Entry<Integer, String> values : e.getValue().entrySet()) {
+                    RatingPropertyValue propertyValue = property.getValues().get(values.getKey());
+                    if (propertyValue == null) {
+                        propertyValue = new RatingPropertyValue(property, values.getKey());
+                    }
+                    propertyValue.setValue(values.getValue());
+                    property.getValues().put(values.getKey(), propertyValue);
                 }
-                propertyValue.setValue(values.getValue());
-                property.getValues().put(values.getKey(), propertyValue);
             }
             ratingPropertyRepository.save(property);
         }
@@ -165,5 +185,41 @@ public class CompanyService implements ICompanyService {
     public void deleteCompany(final Long companyId) {
         User currentUser = SecurityUtils.getCurrentUser();
         companyRepository.delete(currentUser.getId(), companyId);
+    }
+
+    @Override
+    public void updateCompany(final ShareholderCommand command, final Long companyId) {
+        Company company = getCompanyForCurrentUser(companyId);
+        shareholderRepository.deleteByCompanyId(companyId);
+        for (SHCommand shCom : command.getShareholders()) {
+            if (!shCom.isEmpty()) {
+                ShareHolder sh = new ShareHolder(company, shCom.getFirstname(), shCom.getLastname(), shCom.getPercent());
+                shareholderRepository.save(sh);
+            }
+        }
+    }
+
+    @Override
+    public Company getCompanyShareHolderForCurrentUser(final Long companyId) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        return companyRepository.getByIdAndUserIdFetchingShareholders(companyId, currentUser.getId());
+    }
+
+    @Override
+    public Company getCompanyManagersForCurrentUser(final Long companyId) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        return companyRepository.getByIdAndUserIdFetchingManagers(companyId, currentUser.getId());
+    }
+
+    @Override
+    public void updateCompany(final ManagerCommand command, final Long companyId) {
+        Company company = getCompanyForCurrentUser(companyId);
+        managerRepository.deleteByCompanyId(companyId);
+        for (MCommand shCom : command.getManagers()) {
+            if (!shCom.isEmpty()) {
+                Manager m = new Manager(company, shCom.getFirstname(), shCom.getLastname(), shCom.getFunction());
+                managerRepository.save(m);
+            }
+        }
     }
 }
