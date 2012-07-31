@@ -23,4 +23,7 @@ public interface CompanyRepository extends CrudRepository<Company, Long>, Compan
 
     @Query(value = "select c from Company c left join fetch c.managers where c.id=?1 and c.user.id=?2")
     Company getByIdAndUserIdFetchingManagers(Long companyId, Long id);
+
+    @Query(value = "select c from Company c left join fetch c.managers m left join fetch c.shareholders s left join fetch c.properties p left join fetch p.values where c.id=?1 and c.user.id=?2")
+    Company getByIdAndUserIdFetchingReport(Long companyId, Long id);
 }

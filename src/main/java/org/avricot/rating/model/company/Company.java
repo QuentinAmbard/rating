@@ -42,6 +42,12 @@ public class Company extends DefaultObject {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @Column(name = "NOTE")
+    private String note;
+
+    @Column(name = "VALIDATED")
+    private boolean validated;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -191,6 +197,22 @@ public class Company extends DefaultObject {
 
     public void setManagers(final Set<Manager> managers) {
         this.managers = managers;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(final String note) {
+        this.note = note;
+    }
+
+    public boolean isValidated() {
+        return validated;
+    }
+
+    public void setValidated(final boolean validated) {
+        this.validated = validated;
     }
 
 }

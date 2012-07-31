@@ -30,4 +30,8 @@ public interface ICompanyService {
     void updateCompany(ManagerCommand command, Long companyId);
 
     Company getCompanyManagersForCurrentUser(Long companyId);
+
+    void updateNotes(Long companyId, String note);
+
+    void activation(Long companyId);
 }

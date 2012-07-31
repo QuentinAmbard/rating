@@ -12,6 +12,7 @@ import org.avricot.rating.model.rating.RatingPropertyValue;
 import org.avricot.rating.model.rating.Type;
 import org.avricot.rating.service.rule.RuleHelper;
 import function org.avricot.rating.service.rule.RuleHelper.get;
+import function org.avricot.rating.service.rule.RuleHelper.getF;
 
 #declare any global variables here;
 global HashMap result;
@@ -103,6 +104,44 @@ then
 	result.put("QUICK_RATIO", get(prop, "BALANCE_CURRENT_ASSETS").minus(get(prop, "BALANCE_STOCKS_WIP")).div(get(prop, "BALANCE_CURRENT_LIABILITIES")));
 	result.put("ACID_TEST", get(prop, "BALANCE_CASH_EQUI").div(get(prop, "BALANCE_CURRENT_LIABILITIES")));		
 
+	result.put("NOTE8_FACTOR1_RELIANCE_MERCHANDISING", get(prop, "FACTOR1_RELIANCE_MERCHANDISING"));
+	result.put("NOTE8_FACTOR1_RELIANCE_LARGEST_REGION", get(prop, "FACTOR1_RELIANCE_LARGEST_REGION"));
+	result.put("NOTE8_FACTOR1_PRIMARY_MARKET_POSITION", get(prop, "FACTOR1_PRIMARY_MARKET_POSITION"));
+	result.put("NOTE8_FACTOR1_GLOBAL_MARKET_POSITION", get(prop, "FACTOR1_GLOBAL_MARKET_POSITION"));
+	result.put("NOTE8_FACTOR2_REVENUES", helper.getFork("REVENUES",result.get("REVENUES_AVG2")));
+	result.put("NOTE8_FACTOR2_FIXED_ASSETS", helper.getFork("FIXED_ASSETS",get(prop,"BALANCE_FIXED_ASSETS").getLastYear()));
+	result.put("NOTE8_FACTOR3_NET_DEBT_OVER_EBITDA", helper.getFork("NET_DEBT_OVER_EBITDA",get(result, "NET_DEBT_OVER_EBITDA").getLastYear()));
+	result.put("NOTE8_FACTOR3_FFO_OVER_DEBT", helper.getFork("FFO_OVER_DEBT",get(result, "FFO_OVER_TOTAL_DEBT").getLastYear()));
+	result.put("NOTE8_FACTOR3_RCF_OVER_NET_DEBT", helper.getFork("RCF_OVER_NET_DEBT",get(result, "RCF_OVER_NET_DEBT").getLastYear()));
+	result.put("NOTE8_FACTOR4_FINANCIAL_POLICIES", get(prop, "FACTOR4_FINANCIAL_POLICIES"));
+	result.put("NOTE8_FACTOR5_BUSINESS_RISK_PROFILE", get(prop, "FACTOR5_BUSINESS_RISK_PROFILE").plus(2));
+	
+	result.put("NOTE20_FACTOR1_RELIANCE_MERCHANDISING", helper.getIndice("CONVERT_8_20", get(result, "NOTE8_FACTOR1_RELIANCE_MERCHANDISING").getLastYear()));
+	result.put("NOTE20_FACTOR1_RELIANCE_LARGEST_REGION", helper.getIndice("CONVERT_8_20", get(result, "NOTE8_FACTOR1_RELIANCE_LARGEST_REGION").getLastYear()));
+	result.put("NOTE20_FACTOR1_PRIMARY_MARKET_POSITION", helper.getIndice("CONVERT_8_20", get(result, "NOTE8_FACTOR1_PRIMARY_MARKET_POSITION").getLastYear()));
+	result.put("NOTE20_FACTOR1_GLOBAL_MARKET_POSITION", helper.getIndice("CONVERT_8_20", get(result, "NOTE8_FACTOR1_GLOBAL_MARKET_POSITION").getLastYear()));
+	result.put("NOTE20_FACTOR2_REVENUES", helper.getIndice("CONVERT_8_20", result.get("NOTE8_FACTOR2_REVENUES")));
+	result.put("NOTE20_FACTOR2_FIXED_ASSETS", helper.getIndice("CONVERT_8_20", result.get("NOTE8_FACTOR2_FIXED_ASSETS")));
+	result.put("NOTE20_FACTOR3_NET_DEBT_OVER_EBITDA", helper.getIndice("CONVERT_8_20", result.get("NOTE8_FACTOR3_NET_DEBT_OVER_EBITDA")));
+	result.put("NOTE20_FACTOR3_FFO_OVER_DEBT", helper.getIndice("CONVERT_8_20", result.get("NOTE8_FACTOR3_FFO_OVER_DEBT")));
+	result.put("NOTE20_FACTOR3_RCF_OVER_NET_DEBT", helper.getIndice("CONVERT_8_20", result.get("NOTE8_FACTOR3_RCF_OVER_NET_DEBT")));
+	result.put("NOTE20_FACTOR4_FINANCIAL_POLICIES", helper.getIndice("CONVERT_8_20", get(result, "NOTE8_FACTOR4_FINANCIAL_POLICIES").getLastYear()));
+	result.put("NOTE20_FACTOR5_BUSINESS_RISK_PROFILE", helper.getIndice("CONVERT_8_20", get(result, "NOTE8_FACTOR5_BUSINESS_RISK_PROFILE").getLastYear()));
+	
+	result.put("NOTE20_FACTOR1_MARKET_POSITION", getF(result, "NOTE20_FACTOR1_RELIANCE_MERCHANDISING")*2F + getF(result, "NOTE20_FACTOR1_PRIMARY_MARKET_POSITION") + getF(result, "NOTE20_FACTOR1_GLOBAL_MARKET_POSITION")*0.05F);
+	result.put("NOTE20_FACTOR2_SCALE", getF(result, "NOTE20_FACTOR2_REVENUES") * 2F + getF(result, "NOTE20_FACTOR2_FIXED_ASSETS")* 0.05F);
+	result.put("NOTE20_FACTOR3_LEVERAGE", getF(result, "NOTE20_FACTOR3_NET_DEBT_OVER_EBITDA")* 2F + getF(result, "NOTE20_FACTOR3_FFO_OVER_DEBT")+ getF(result, "NOTE20_FACTOR3_RCF_OVER_NET_DEBT")*0.05F);
+	result.put("NOTE20_FACTOR4_FINANCIAL_POLICIES", get(result, "NOTE20_FACTOR4_RCF_OVER_NET_DEBT").mult(0.2F));
+	result.put("NOTE20_FACTOR5_BUSINESS_RISK_PROFILE", getF(result, "NOTE20_FACTOR5_BUSINESS_RISK_PROFILE")*0.2F);
+	
+	result.put("NOTE_FINALE", (getF(result, "NOTE20_FACTOR1_MARKET_POSITION") + getF(result, "NOTE20_FACTOR2_SCALE")+ getF(result, "NOTE20_FACTOR3_LEVERAGE")+get(result, "NOTE20_FACTOR4_FINANCIAL_POLICIES").getLastYear()+ getF(result, "NOTE20_FACTOR5_BUSINESS_RISK_PROFILE"))/8F*20F);
+	result.put("NOTE_FINALE_STABILISEE", helper.getFork("EQUIVALENCE_AAA", getF(result, "NOTE_FINALE")));
+	
+	result.put("NOTE_FACTOR1_MARKET_POSITION_STABILISEE", helper.getFork("EQUIVALENCE_AAA_FACTORS", getF(result, "NOTE20_FACTOR1_MARKET_POSITION")));
+	result.put("NOTE_FACTOR2_SCALE_STABILISEE", helper.getFork("EQUIVALENCE_AAA_FACTORS", getF(result, "NOTE20_FACTOR2_SCALE")));
+	result.put("NOTE_FACTOR3_LEVERAGE_STABILISEE", helper.getFork("EQUIVALENCE_AAA_FACTORS", getF(result, "NOTE20_FACTOR3_LEVERAGE")));
+	result.put("NOTE_FACTOR4_FINANCIAL_POLICIES_STABILISEE", helper.getFork("EQUIVALENCE_AAA_FACTORS", get(result, "NOTE20_FACTOR4_FINANCIAL_POLICIES").getLastYear()));
+	result.put("NOTE_FACTOR5_BUSINESS_RISK_PROFILE_STABILISEE", helper.getFork("EQUIVALENCE_AAA_FACTORS", getF(result, "NOTE20_FACTOR5_BUSINESS_RISK_PROFILE")));
 end
 
 
@@ -111,6 +150,5 @@ when
 	Company(sector.name() == "TEXTILE")
 then
    result.put("sector TEXTILE", 1);
-   LoggerFactory.getLogger("karl-rules").info("Ok pour le TEXTILE");
 end
 

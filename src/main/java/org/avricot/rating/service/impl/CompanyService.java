@@ -143,7 +143,11 @@ public class CompanyService implements ICompanyService {
 
     @Override
     public CompanyReport getCompanyReport(final Long companyId) {
-        Company company = getCompanyForCurrentUser(companyId);
+        User currentUser = SecurityUtils.getCurrentUser();
+        Company company = companyRepository.getByIdAndUserIdFetchingReport(companyId, currentUser.getId());
+        if (company == null) {
+            throw new UnauthorizedException("can't access company " + companyId + ", " + currentUser.getId());
+        }
         Map<String, Calc> properties = new HashMap<String, Calc>();
         for (Entry<RatingType, RatingProperty> e : company.getProperties().entrySet()) {
             if (e.getKey().getType() == Type.NUM) {
@@ -156,9 +160,6 @@ public class CompanyService implements ICompanyService {
         }
         Map<String, Object> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "helper", "prop", "company" }, new Object[] { ruleHelper,
                 properties, company });
-        // TODO pour les tests à enlever
-        // result.put("PERCENT_CROI", new Calc());
-        // result.put("CA", new Calc());
         List<Result> resultTypes = resultRepository.findBySectorOrSectorIsNull(company.getSector());
         Map<String, List<Result>> map = new LinkedHashMap<String, List<Result>>();
         for (Result r : resultTypes) {
@@ -225,5 +226,17 @@ public class CompanyService implements ICompanyService {
                 managerRepository.save(m);
             }
         }
+    }
+
+    @Override
+    public void updateNotes(final Long companyId, final String note) {
+        Company company = getCompanyForCurrentUser(companyId);
+        company.setNote(note);
+    }
+
+    @Override
+    public void activation(final Long companyId) {
+        Company company = getCompanyForCurrentUser(companyId);
+        company.setValidated(!company.isValidated());
     }
 }

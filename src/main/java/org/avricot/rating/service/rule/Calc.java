@@ -1,13 +1,12 @@
 package org.avricot.rating.service.rule;
 
-import java.util.Calendar;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class Calc {
     private Map<Integer, Float> values = new HashMapNullSafe();
 
-    public Calc div(final int value) {
+    public Calc div(final float value) {
         return mult(1 / value);
     }
 
@@ -34,7 +33,7 @@ public class Calc {
         return result;
     }
 
-    public Calc mult(final int value) {
+    public Calc mult(final float value) {
         Calc result = new Calc();
         for (Entry<Integer, Float> e : values.entrySet()) {
             result.getValues().put(e.getKey(), e.getValue() * value);
@@ -51,7 +50,7 @@ public class Calc {
         return result;
     }
 
-    public Calc plus(final int value) {
+    public Calc plus(final float value) {
         Calc result = new Calc();
         for (Entry<Integer, Float> e : values.entrySet()) {
             result.getValues().put(e.getKey(), e.getValue() + value);
@@ -59,7 +58,7 @@ public class Calc {
         return result;
     }
 
-    public Calc minus(final int value) {
+    public Calc minus(final float value) {
         return plus(-value);
     }
 
@@ -83,7 +82,7 @@ public class Calc {
 
     public Float avg(final Integer yearsNumber) {
         Float result = 0F;
-        Integer currentYear = getCurrentYear();
+        Integer currentYear = getMaxYear();
         for (int i = currentYear; i > currentYear - yearsNumber; i--) {
             result += values.get(i);
         }
@@ -98,15 +97,25 @@ public class Calc {
             if (previousValue == 0F) {
                 value = 0F;
             } else {
-                value = e.getValue() / previousValue - 1;
+                value = e.getValue() / previousValue - 1F;
             }
             result.getValues().put(e.getKey(), value);
         }
         return result;
     }
 
-    private Integer getCurrentYear() {
-        return Calendar.getInstance().get(Calendar.YEAR);
+    public Float getLastYear() {
+        return values.get(getMaxYear());
+    }
+
+    private Integer getMaxYear() {
+        Integer maxYear = Integer.MIN_VALUE;
+        for (Entry<Integer, Float> e : values.entrySet()) {
+            if (e.getKey() > maxYear) {
+                maxYear = e.getKey();
+            }
+        }
+        return maxYear;
     }
 
     public Map<Integer, Float> getValues() {

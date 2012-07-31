@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/rate")
@@ -153,6 +155,12 @@ public class RateController {
         return "redirect:/rate/view";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/view/activation/{companyId}", method = RequestMethod.POST)
+    public void view(final Model model, @PathVariable final Long companyId) {
+        companyService.activation(companyId);
+    }
+
     @RequestMapping(value = "/view", method = RequestMethod.GET)
     public String show(final Model model) {
         List<Company> companies = companyService.getCompanies();
@@ -173,6 +181,12 @@ public class RateController {
         model.addAttribute("report", report);
         addYears(model, report.getCompany());
         return "rate/show";
+    }
+
+    @RequestMapping(value = "/show/{companyId}", method = RequestMethod.POST)
+    public String show(final Model model, @PathVariable final Long companyId, @RequestParam("note") final String note) {
+        companyService.updateNotes(companyId, note);
+        return "redirect:/rate/show/" + companyId;
     }
 
     private void addYears(final Model model, final Company company) {

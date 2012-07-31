@@ -19,3 +19,7 @@ input.error {
 #formAdd input {
 	width: 250px;
 }
+
+.smallPadding th, .smallPadding td{
+	padding: 2px !important;
+}

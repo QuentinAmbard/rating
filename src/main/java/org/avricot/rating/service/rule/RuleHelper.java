@@ -8,17 +8,26 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.avricot.rating.model.company.Fork;
 import org.avricot.rating.repository.fork.ForkRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RuleHelper {
+    private final static Logger LOGGER = LoggerFactory.getLogger(RuleHelper.class);
+
     public static Calc get(final Map<String, Calc> prop, final String name) {
         Calc calc = prop.get(name);
         if (calc == null) {
             return new Calc();
         }
         return calc;
+    }
+
+    public static Float getF(final Map<String, Object> prop, final String name) {
+        return (Float) prop.get(name);
     }
 
     private final ForkRepository forkRepository;
@@ -29,20 +38,22 @@ public class RuleHelper {
         this.forkRepository = source;
     }
 
-    public synchronized int getForkPercent(final String name, final Float value) {
+    public synchronized int getForkPercent(final String name, final Object val) {
+        Float value = (Float) val;
         float v = getFork(name, value);
         Float[] vals = values.get(name);
         return (int) (v / (vals.length) * 100);
     }
 
-
-    public synchronized Float getIndice(final String name, final Number value) {
+    public synchronized Float getIndice(final String name, final Object val) {
+        Number value = (Number) val;
         ensureKeyExists(name);
         Float[] vals = values.get(name);
         return vals[value.intValue()];
     }
 
-    public synchronized int getFork(final String name, final Float value) {
+    public synchronized int getFork(final String name, final Object val) {
+        Float value = (Float) val;
         ensureKeyExists(name);
         Float[] vals = values.get(name);
         List<Float> list;
@@ -77,7 +88,11 @@ public class RuleHelper {
 
     private void ensureKeyExists(final String name) {
         if (!values.containsKey(name)) {
-            String vs = forkRepository.findByName(name).getValues();
+            Fork fork = forkRepository.findByName(name);
+            if (fork == null) {
+                LOGGER.error("can't find fork with name {} in the db", name);
+            }
+            String vs = fork.getValues();
             String[] strValues = vs.split("\\|");
             Float[] val = new Float[strValues.length];
             for (int i = 0; i < strValues.length; i++) {

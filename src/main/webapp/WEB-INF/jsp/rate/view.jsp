@@ -5,6 +5,13 @@
 			$('#myModal').modal('show');
 			$('#deleteButton').attr("href", $(this).attr("data-href"));
 		})
+		$('._validate').change(function () {
+			$.ajax({
+			  url: '<c:url value="/rate/view/activation/"/>'+$(this).attr("data-id"),
+			  type: "POST"
+			});
+			$("#edit"+$(this).attr("data-id")).toggle();
+		});
 	});
 </script>
 
@@ -21,10 +28,10 @@
   <thead>
     <tr>
       <th>Nom</th>
-      <th style="width: 130px">Identifiant</th>
-      <th style="width: 100px">Date de création</th>
+      <th style="width: 130px">Identifier</th>
+      <th style="width: 100px">Registration date</th>
       <th>Secteur</th>
-      <th style="width: 100px">Noté sur</th>
+      <th style="width: 100px">Validation</th>
       <th>Score</th>
       <th style="width: 270px">Actions</th>
     </tr>
@@ -36,12 +43,20 @@
 	      <td><c:out value="${company.businessId}"/></td>
 	      <td><c:out value="${company.creationDate}"/></td>
 	      <td><spring:message code="enum.sector.${company.sector.name}"/></td>
-	      <td><c:out value="${company.yearNumber}"/> ans / <c:out value="${company.dayNumber}"/> days </td>
+	      <td>
+		      <c:if test="${company.validated}">
+			   	<input class="_validate" data-id="<c:out value="${company.id}"/>" id="validate<c:out value="${company.id}"/>" type="checkbox" checked="checked" /> <label style="cursor: pointer; display: inline" for="validate<c:out value="${company.id}"/>">Validated</label>
+		      </c:if>
+		      <c:if test="${!company.validated}">
+			   	<input class="_validate" data-id="<c:out value="${company.id}"/>" id="validate<c:out value="${company.id}"/>" type="checkbox" /> <label style="cursor: pointer; display: inline" for="validate<c:out value="${company.id}"/>">Validate</label>
+		      </c:if>
+	      </td>
 	      <td><c:out value="${company.score}"/></td>
-	      <td><a class="btn btn-primary" href="<c:url value="/rate/add/${company.id}"/>"><i class="icon-pencil"></i> Edit</a> 
-	      <a class="btn btn-success" href="<c:url value="/rate/show/${company.id}"/>"><i class="icon-eye-open"></i> View details</a> 
-<%-- 	      </td> --%>
- 	      <span data-href="<c:url value="/rate/delete/${company.id}"/>" class="_deleteCompany btn btn-danger"><i class="icon-trash"></i>Delete</span></td> 
+	      <td>
+			  <a class="btn btn-primary" id="edit<c:out value="${company.id}"/>" <c:if test="${company.validated}">style="display: none"</c:if>href="<c:url value="/rate/add/${company.id}"/>"><i class="icon-pencil"></i> Edit</a> 
+		      <a class="btn btn-success" href="<c:url value="/rate/show/${company.id}"/>"><i class="icon-eye-open"></i> View details</a> 
+	 	      <span data-href="<c:url value="/rate/delete/${company.id}"/>" class="_deleteCompany btn btn-danger"><i class="icon-trash"></i>Delete</span>
+ 	      </td> 
 	    </tr>
 	</c:forEach>
   </tbody>

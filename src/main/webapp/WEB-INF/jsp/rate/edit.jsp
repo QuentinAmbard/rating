@@ -49,8 +49,8 @@
 					    <c:choose>
 		    	  			<c:when test="${item.key.type.name == 'RADIO'}">
 					 		  <c:forEach var="val" items="${item.key.dropDownValues}" varStatus="status">
-					 		     <input value="${status.index}" id="<c:out value="properties_${item.key.name}_${status.index}" />" type="radio" <c:if test="${(item.value == null and status.index==0 ) or item.value.globalValue == status.index}">checked="checked"</c:if> name="<c:out value="properties['${item.key.name}'].globalValue" />" >
-					 		     <label style="cursor:pointer; display:inline" for="<c:out value="properties_${item.key.name}_${status.index}" />"><spring:message code="rating.${item.key.name}.${status.index}"/></label><br />
+					 		     <input style="cursor:pointer; float:left"  value="${status.index}" id="<c:out value="properties_${item.key.name}_${status.index}" />" type="radio" <c:if test="${(item.value == null and status.index==0 ) or item.value.globalValue == status.index}">checked="checked"</c:if> name="<c:out value="properties['${item.key.name}'].globalValue" />" >
+					 		     <label style="cursor:pointer; margin-left: 20px;" for="<c:out value="properties_${item.key.name}_${status.index}" />"><spring:message code="rating.${item.key.name}.${status.index}"/></label>
 							  </c:forEach>
 							</c:when>
 							<c:otherwise>
