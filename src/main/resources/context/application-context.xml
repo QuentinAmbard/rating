@@ -31,6 +31,7 @@
 				<value>classpath:messages/text</value>
 				<value>classpath:messages/rating</value>
 				<value>classpath:messages/result</value>
+				<value>classpath:messages/fork</value>
 			</list>
 		</property>
 		<property name="cacheSeconds" value="${resource.cache.seconds}"/>

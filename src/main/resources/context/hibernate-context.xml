@@ -5,20 +5,41 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-	 
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+           <property name="url" value="${rating.mysql.url}" />
+           <property name="username" value="${rating.mysql.username}" />
+           <property name="password" value="${rating.mysql.password}" />
+	</bean>
 	 
 	<!-- enables @PersistenceUnit/@PersistenceContext annotations -->
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 	 
 	<!-- use persistence.xml for JPA configuration -->
-	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-		<!-- needed for multiple persistence units -->
-		<property name="persistenceUnitName" value="ratingPersistenceUnit" />
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceXmlLocation" value="classpath:./META-INF/persistence.xml"/>
+        <property name="persistenceUnitName" value="ratingPersistenceUnit"/>
+        <property name="dataSource" ref="dataSource"/>
+
+        <property name="jpaVendorAdapter"> 
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"> 
+                <property name="database" value="MYSQL"/> 
+                <property name="showSql" value="${hibernate.show_sql}" /> 
+                <property name="generateDdl" value="true"/>
+            </bean> 
+        </property>
+        <property name="jpaProperties">
+                <!-- set extra properties here, e.g. for Hibernate: -->
+            <props>
+            <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
 	</bean>
 	 
 	<!-- enables JPA transaction manager -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
     <jpa:repositories base-package="org.avricot.rating.repository" />

@@ -38,6 +38,7 @@ import org.avricot.rating.service.ShareholderCommand;
 import org.avricot.rating.service.ShareholderCommand.SHCommand;
 import org.avricot.rating.service.rule.Calc;
 import org.avricot.rating.service.rule.IRulesService;
+import org.avricot.rating.service.rule.RuleHelper;
 import org.avricot.rating.web.controller.rate.PropertyCommand;
 import org.avricot.rating.web.controller.rate.PropertyCommand.MapProperties;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,8 @@ public class CompanyService implements ICompanyService {
     private IRulesService<Map<String, Object>> rulesService;
     @Inject
     private ResultRepository resultRepository;
+    @Inject
+    private RuleHelper ruleHelper;
 
     @Override
     public Long updateCompany(final CompanyCommand command) {
@@ -151,7 +154,8 @@ public class CompanyService implements ICompanyService {
                 properties.put(e.getKey().getName(), calc);
             }
         }
-        Map<String, Object> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "prop", "company" }, new Object[] { properties, company });
+        Map<String, Object> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "helper", "prop", "company" }, new Object[] { ruleHelper,
+                properties, company });
         // TODO pour les tests à enlever
         // result.put("PERCENT_CROI", new Calc());
         // result.put("CA", new Calc());

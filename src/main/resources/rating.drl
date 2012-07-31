@@ -10,14 +10,15 @@ import org.avricot.rating.model.company.Company;
 import org.avricot.rating.model.rating.RatingProperty;
 import org.avricot.rating.model.rating.RatingPropertyValue;
 import org.avricot.rating.model.rating.Type;
-
-import function org.avricot.rating.service.rule.RuleHelper.get
+import org.avricot.rating.service.rule.RuleHelper;
+import function org.avricot.rating.service.rule.RuleHelper.get;
 
 #declare any global variables here;
 global HashMap result;
 global HashMap<String, Calc> prop;
 global Company company;
 global Map<Integer,RatingPropertyValue> vals;
+global RuleHelper helper;
 
 
 rule "Common rules"

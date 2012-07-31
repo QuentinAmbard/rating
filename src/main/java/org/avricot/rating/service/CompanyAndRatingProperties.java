@@ -14,6 +14,7 @@ public class CompanyAndRatingProperties {
     public CompanyAndRatingProperties(final Company company, final Map<RatingType, RatingProperty> properties, final boolean displayYear) {
         this.company = company;
         this.properties = properties;
+        this.displayYear = displayYear;
     }
 
     public Company getCompany() {

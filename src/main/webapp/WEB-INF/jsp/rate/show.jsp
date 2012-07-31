@@ -16,16 +16,19 @@
 	<p>Identifiant : ${report.company.businessId}</p>
 	
     <div class="span6">
-    
+    blabla share holder<br />
+    blabla manager<br />
+    blabla blabla<br />
+     &nbsp;
     </div>
     <div class="span6">
     	
       <c:forEach var="reportMenu" items="${report.resultTypes}" varStatus="statusResultMenu">
-	    <spring:message code="menu.${reportMenu.key}"/>
+	    <h3><spring:message code="menu.${reportMenu.key}"/></h3>
 	    <table class="table table-striped">
 		  <thead>
 		    <tr>
-		      <th style="width:150px">#</th>
+		      <th style="width:200px"></th>
 		      <c:forEach var="year" items="${years}" varStatus="statusYears"><th><c:out value="${year}"/></th></c:forEach>
 		    </tr>
 		  </thead>
@@ -35,7 +38,8 @@
 		      <td><spring:message code="result.${reportType.name}"/></td>
 		      <c:forEach var="year" items="${years}" varStatus="statusYears">
 		      <th>
-		      	<c:out value="${report.results[reportType.name].values[year]}"/>
+			    <fmt:formatNumber var="val" maxFractionDigits="2"><c:out value="${report.results[reportType.name].values[year]}"/></fmt:formatNumber>
+		      	<c:out value="${val}"/>
 		      </th>
 		      </c:forEach>
 		    </tr>

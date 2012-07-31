@@ -98,7 +98,7 @@ public class Calc {
             if (previousValue == 0F) {
                 value = 0F;
             } else {
-                value = e.getValue() / previousValue;
+                value = e.getValue() / previousValue - 1;
             }
             result.getValues().put(e.getKey(), value);
         }
