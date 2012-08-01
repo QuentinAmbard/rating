@@ -32,14 +32,14 @@ public class PropertyCommand {
     public static class MapProperties extends HashMap<Integer, String> {
         private static final long serialVersionUID = 1L;
 
-        private Integer globalValue;
+        private Integer globalKey;
 
-        public Integer getGlobalValue() {
-            return globalValue;
+        public Integer getGlobalKey() {
+            return globalKey;
         }
 
-        public void setGlobalValue(final Integer globalValue) {
-            this.globalValue = globalValue;
+        public void setGlobalKey(final Integer globalValue) {
+            this.globalKey = globalValue;
         }
     }
 

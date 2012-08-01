@@ -15,10 +15,13 @@ import javax.persistence.Table;
 
 import org.avricot.rating.model.DefaultObject;
 import org.avricot.rating.model.company.Company;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name = "RATING_PROPERTY")
 public class RatingProperty extends DefaultObject {
+    private final static Logger LOGGER = LoggerFactory.getLogger(RatingProperty.class);
     private static final long serialVersionUID = 1L;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,7 +37,7 @@ public class RatingProperty extends DefaultObject {
     private RatingType type;
 
     @Column(name = "GLOBAL_VALUE")
-    private Integer globalValue;
+    private Integer globalKey;
 
     public RatingProperty() {
 
@@ -71,15 +74,26 @@ public class RatingProperty extends DefaultObject {
 
     @Override
     public String toString() {
-        return "RatingProperty [company=" + company + ", type=" + type + ", globalValue=" + globalValue + "]";
+        return "RatingProperty [company=" + company + ", type=" + type + ", globalValue=" + globalKey + "]";
     }
 
-    public Integer getGlobalValue() {
-        return globalValue;
+    public Float getGlobalValue() {
+        if (!type.isGlobal()) {
+            LOGGER.error("property {} isn't global, can't get it's global value", type.getName());
+        }
+        String[] vals = getType().getDropDownValues();
+        return Float.valueOf(vals[getGlobalKey()]);
     }
 
-    public void setGlobalValue(final Integer globalValue) {
-        this.globalValue = globalValue;
+    public Integer getGlobalKey() {
+        if (globalKey == null) {
+            return 0;
+        }
+        return globalKey;
+    }
+
+    public void setGlobalKey(final Integer globalValue) {
+        this.globalKey = globalValue;
     }
 
 }

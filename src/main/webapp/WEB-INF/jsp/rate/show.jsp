@@ -16,14 +16,24 @@
 			$('#noteEdition').hide();
 			$('#noteDisplay').show();
 		});
+		$(".slider").each(function () {
+			var el = $(this); 
+			el.slider({ value:el.attr("data-score"),
+				min: 0,
+				max: el.attr("data-max-value"),
+				disabled: true });
+		});
 	});
 </script>
 
 <div class="row show-grid">
-	<h2>Entreprise ${report.company.name} : ${report.company.score}</h2>
-	<p>Identifiant : ${report.company.businessId}</p>
 	
     <div class="span6">
+    
+	<h2>Entreprise ${report.company.name} : ${report.company.score} <spring:message code="note.NOTE_FINALE_TXT.${report.results['NOTE_FINALE_STABILISEE']}"/></h2>
+	<p>Identifiant : ${report.company.businessId}</p>
+        <div data-max-value="19" data-score="<c:out value="${report.results['NOTE_FINALE_STABILISEE']}"/>" style="width: 400px" class="slider"></div>
+    
 	    <h3>Description</h3>
 	    <c:choose>
 			<c:when test="${empty report.company.description}">
@@ -40,7 +50,7 @@
 				<em>Data not available</em>
 			</c:when>
 			<c:otherwise>
-			    <table class="table table-striped">
+			    <table class="smallPadding table table-striped">
 				  <thead>
 				    <tr>
 				      <th>Firstname</th>
@@ -67,7 +77,7 @@
 				<em>Data not available</em>
 			</c:when>
 			<c:otherwise>    
-			    <table class=" table table-striped">
+			    <table class="smallPadding table table-striped">
 				  <thead>
 				    <tr>
 				      <th>Firstname</th>
@@ -101,6 +111,13 @@
 			<button id="editNote" type="submit" class="btn btn-primary"><i class="icon-pencil"></i> Edit notes</button>
 		</div>
 		<br />
+		
+		<h3>Factors</h3>
+	    <c:forEach var="factor" items="${report.factors}" >
+	       <h3><spring:message code="factor.${factor.name}"/></h3>
+		    <div data-max-value="7" data-score="<c:out value="${report.results[factor.name]}"/>" style="width: 400px" class="slider"></div>
+	    </c:forEach>
+				
 		<h3>Informations</h3>
 		<c:if test="${report.company.validated}">
 			<div class="alert alert-success">
@@ -114,7 +131,7 @@
 		        This company has not been validated yet.
 	        </div>
         </c:if>
-		Rated on <c:out value="${report.company.yearNumber}"/> ans / <c:out value="${report.company.dayNumber}"/> days<br />
+		Rated on <c:out value="${report.company.yearNumber}"/> years / <c:out value="${report.company.dayNumber}"/> days<br />
 		
     </div>
     

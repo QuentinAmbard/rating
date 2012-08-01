@@ -23,3 +23,7 @@ input.error {
 .smallPadding th, .smallPadding td{
 	padding: 2px !important;
 }
+
+.slider .ui-slider-handle {
+	margin-top: -10px;
+}

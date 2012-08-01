@@ -18,16 +18,31 @@ import org.springframework.stereotype.Component;
 public class RuleHelper {
     private final static Logger LOGGER = LoggerFactory.getLogger(RuleHelper.class);
 
+    public static Float getGlobalValue(final Map<String, Float> prop, final String name) {
+        Float val = prop.get(name);
+        if (val == null) {
+            LOGGER.info("can't find global value with name {}", name);
+            return 0F;
+        }
+        return val;
+    }
+
     public static Calc get(final Map<String, Calc> prop, final String name) {
         Calc calc = prop.get(name);
         if (calc == null) {
+            LOGGER.info("can't find calc with name {}", name);
             return new Calc();
         }
         return calc;
     }
 
-    public static Float getF(final Map<String, Object> prop, final String name) {
-        return (Float) prop.get(name);
+    public static Float getF(final Map<String, Float> prop, final String name) {
+        Float val = prop.get(name);
+        if (val == null) {
+            LOGGER.info("can't find float value with name {}", name);
+            return 0F;
+        }
+        return val;
     }
 
     private final ForkRepository forkRepository;
@@ -38,11 +53,11 @@ public class RuleHelper {
         this.forkRepository = source;
     }
 
-    public synchronized int getForkPercent(final String name, final Object val) {
+    public synchronized Float getForkPercent(final String name, final Object val) {
         Float value = (Float) val;
         float v = getFork(name, value);
         Float[] vals = values.get(name);
-        return (int) (v / (vals.length) * 100);
+        return v / (vals.length) * 100F;
     }
 
     public synchronized Float getIndice(final String name, final Object val) {
@@ -52,7 +67,7 @@ public class RuleHelper {
         return vals[value.intValue()];
     }
 
-    public synchronized int getFork(final String name, final Object val) {
+    public synchronized Float getFork(final String name, final Object val) {
         Float value = (Float) val;
         ensureKeyExists(name);
         Float[] vals = values.get(name);
@@ -83,7 +98,7 @@ public class RuleHelper {
         if (decroi) {
             result = vals.length - result;
         }
-        return result;
+        return new Float(result);
     }
 
     private void ensureKeyExists(final String name) {

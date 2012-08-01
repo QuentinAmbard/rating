@@ -13,6 +13,7 @@ import org.avricot.rating.model.company.Company;
 import org.avricot.rating.model.company.EditionStep;
 import org.avricot.rating.model.company.Manager;
 import org.avricot.rating.model.company.ShareHolder;
+import org.avricot.rating.model.rating.Factor;
 import org.avricot.rating.model.rating.RatingProperty;
 import org.avricot.rating.model.rating.RatingPropertyValue;
 import org.avricot.rating.model.rating.RatingType;
@@ -20,6 +21,7 @@ import org.avricot.rating.model.rating.Result;
 import org.avricot.rating.model.rating.Type;
 import org.avricot.rating.model.user.User;
 import org.avricot.rating.repository.company.CompanyRepository;
+import org.avricot.rating.repository.factor.FactorRepository;
 import org.avricot.rating.repository.manager.ManagerRepository;
 import org.avricot.rating.repository.rating.RatingPropertyRepository;
 import org.avricot.rating.repository.rating.RatingTypeRepository;
@@ -58,6 +60,8 @@ public class CompanyService implements ICompanyService {
     private ManagerRepository managerRepository;
     @Inject
     private RatingPropertyRepository ratingPropertyRepository;
+    @Inject
+    private FactorRepository factorRepository;
     @Inject
     private IRulesService<Map<String, Object>> rulesService;
     @Inject
@@ -116,7 +120,7 @@ public class CompanyService implements ICompanyService {
                 property = new RatingProperty(company, ratingType);
             }
             if (property.getType().isGlobal()) {
-                property.setGlobalValue(e.getValue().getGlobalValue());
+                property.setGlobalKey(e.getValue().getGlobalKey());
             } else {
                 for (Entry<Integer, String> values : e.getValue().entrySet()) {
                     RatingPropertyValue propertyValue = property.getValues().get(values.getKey());
@@ -148,14 +152,16 @@ public class CompanyService implements ICompanyService {
         if (company == null) {
             throw new UnauthorizedException("can't access company " + companyId + ", " + currentUser.getId());
         }
-        Map<String, Calc> properties = new HashMap<String, Calc>();
+        Map<String, Object> properties = new HashMap<String, Object>();
         for (Entry<RatingType, RatingProperty> e : company.getProperties().entrySet()) {
-            if (e.getKey().getType() == Type.NUM) {
+            if (e.getKey().getType() == Type.NUM || e.getKey().getType() == Type.PERCENT) {
                 Calc calc = new Calc();
                 for (Entry<Integer, RatingPropertyValue> v : e.getValue().getValues().entrySet()) {
                     calc.getValues().put(v.getKey(), v.getValue().getFloat());
                 }
                 properties.put(e.getKey().getName(), calc);
+            } else if (e.getKey().getType() == Type.RADIO) {
+                properties.put(e.getKey().getName(), e.getValue().getGlobalValue());
             }
         }
         Map<String, Object> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "helper", "prop", "company" }, new Object[] { ruleHelper,
@@ -170,7 +176,9 @@ public class CompanyService implements ICompanyService {
             rts.add(r);
             map.put(r.getMenu(), rts);
         }
-        return new CompanyReport(company, map, result);
+
+        List<Factor> factors = factorRepository.findBySectorOrSectorIsNull(company.getSector());
+        return new CompanyReport(company, map, result, factors);
     }
 
     @Override
