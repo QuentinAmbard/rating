@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.avricot.rating.model.DefaultObject;
@@ -14,8 +17,8 @@ import org.avricot.rating.model.company.Sector;
 public class Result extends DefaultObject {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "SECTOR")
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SECTOR_ID")
     private Sector sector;
 
     @Column(name = "NAME")

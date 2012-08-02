@@ -9,8 +9,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
@@ -66,8 +65,8 @@ public class Company extends DefaultObject {
     @Column(name = "CREATION_DATE")
     private Date creationDate;
 
-    @Column(name = "SECTOR")
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SECTOR_ID")
     private Sector sector;
 
     @OneToMany(mappedBy = "company")
@@ -75,7 +74,7 @@ public class Company extends DefaultObject {
     private Map<RatingType, RatingProperty> properties = new HashMap<RatingType, RatingProperty>();
 
     @Column(name = "SCORE")
-    private Float score;
+    private Integer score;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private Set<ShareHolder> shareholders = new HashSet<ShareHolder>();
@@ -159,11 +158,11 @@ public class Company extends DefaultObject {
         this.yearNumber = yearNumber;
     }
 
-    public Float getScore() {
+    public Integer getScore() {
         return score;
     }
 
-    public void setScore(final Float score) {
+    public void setScore(final Integer score) {
         this.score = score;
     }
 

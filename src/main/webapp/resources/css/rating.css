@@ -25,5 +25,17 @@ input.error {
 }
 
 .slider .ui-slider-handle {
-	margin-top: -10px;
+	margin-top: -8px;
+	background-image: url('../img/selector.png') !important	;
+	background-position: bottom;
+	background-color: transparent !important ;
+	width: 17px !important ;
+	height: 27px !important ;
+	border: 0px !important ;
 }
+
+.slider {
+	background-image: url('../img/gradian.png') !important	;
+}
+
+/*  */

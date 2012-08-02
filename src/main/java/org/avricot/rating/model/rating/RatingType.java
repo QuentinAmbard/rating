@@ -1,13 +1,21 @@
 package org.avricot.rating.model.rating;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.avricot.rating.model.DefaultObject;
-import org.avricot.rating.model.company.EditionStep;
 import org.avricot.rating.model.company.Sector;
 
 @Entity
@@ -15,13 +23,13 @@ import org.avricot.rating.model.company.Sector;
 public class RatingType extends DefaultObject {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "SECTOR")
-    @Enumerated(EnumType.STRING)
-    private Sector sector;
+    @ManyToMany
+    @JoinTable(name = "RATING_TYPE_SECTOR", joinColumns = @JoinColumn(name = "RATING_TYPE_ID", referencedColumnName = "ID"), //
+    inverseJoinColumns = @JoinColumn(name = "SECTOR_ID", referencedColumnName = "ID"))
+    private Set<Sector> sectors;
 
-    @Column(name = "STEP")
-    @Enumerated(EnumType.STRING)
-    private EditionStep step;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ratingType")
+    private Set<RatingTypeStep> steps;
 
     @Column(name = "NAME")
     private String name;
@@ -45,7 +53,7 @@ public class RatingType extends DefaultObject {
     @Column(name = "SUM")
     private String sum;
 
-    @Column(name = "HIDE")
+    @Transient
     private boolean hidden;
 
     @Column(name = "H_LEVEL")
@@ -54,12 +62,12 @@ public class RatingType extends DefaultObject {
     @Column(name = "GLOBAL")
     private boolean global;
 
-    public EditionStep getStep() {
-        return step;
+    public Set<RatingTypeStep> getSteps() {
+        return steps;
     }
 
-    public void setStep(final EditionStep step) {
-        this.step = step;
+    public void setStep(final Set<RatingTypeStep> step) {
+        this.steps = step;
     }
 
     public String getName() {
@@ -90,17 +98,17 @@ public class RatingType extends DefaultObject {
         return defaultValue.split("\\|");
     }
 
-    public Sector getSector() {
-        return sector;
+    public Set<Sector> getSectors() {
+        return sectors;
     }
 
-    public void setSector(final Sector sector) {
-        this.sector = sector;
+    public void setSectors(final Set<Sector> sector) {
+        this.sectors = sector;
     }
 
     @Override
     public String toString() {
-        return "RatingType [sector=" + sector + ", step=" + step + ", name=" + name + ", type=" + type + ", defaultValue=" + defaultValue + "]";
+        return "RatingType [sector=" + sectors + ", step=" + steps + ", name=" + name + ", type=" + type + ", defaultValue=" + defaultValue + "]";
     }
 
     public String getValidation() {

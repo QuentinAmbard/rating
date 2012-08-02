@@ -20,6 +20,7 @@ RATING.validation = function () {
 				sumEl.val(sum);
 				sumEl.change();
 			});
+			el.change();
 		});
 
 	});

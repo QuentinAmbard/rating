@@ -10,13 +10,15 @@ import java.util.Map.Entry;
 import javax.inject.Inject;
 
 import org.avricot.rating.model.company.Company;
-import org.avricot.rating.model.company.EditionStep;
 import org.avricot.rating.model.company.Manager;
+import org.avricot.rating.model.company.Sector;
 import org.avricot.rating.model.company.ShareHolder;
+import org.avricot.rating.model.company.Step;
 import org.avricot.rating.model.rating.Factor;
 import org.avricot.rating.model.rating.RatingProperty;
 import org.avricot.rating.model.rating.RatingPropertyValue;
 import org.avricot.rating.model.rating.RatingType;
+import org.avricot.rating.model.rating.RatingTypeStep;
 import org.avricot.rating.model.rating.Result;
 import org.avricot.rating.model.rating.Type;
 import org.avricot.rating.model.user.User;
@@ -26,7 +28,9 @@ import org.avricot.rating.repository.manager.ManagerRepository;
 import org.avricot.rating.repository.rating.RatingPropertyRepository;
 import org.avricot.rating.repository.rating.RatingTypeRepository;
 import org.avricot.rating.repository.result.ResultRepository;
+import org.avricot.rating.repository.sector.SectorRepository;
 import org.avricot.rating.repository.shareholder.ShareholderRepository;
+import org.avricot.rating.repository.step.StepRepository;
 import org.avricot.rating.security.SecurityUtils;
 import org.avricot.rating.security.UnauthorizedException;
 import org.avricot.rating.service.CompanyAndRatingProperties;
@@ -43,6 +47,8 @@ import org.avricot.rating.service.rule.IRulesService;
 import org.avricot.rating.service.rule.RuleHelper;
 import org.avricot.rating.web.controller.rate.PropertyCommand;
 import org.avricot.rating.web.controller.rate.PropertyCommand.MapProperties;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +58,10 @@ public class CompanyService implements ICompanyService {
 
     @Inject
     private CompanyRepository companyRepository;
+    @Inject
+    private StepRepository stepRepository;
+    @Inject
+    private SectorRepository sectorRepository;
     @Inject
     private RatingTypeRepository ratingTypeRepository;
     @Inject
@@ -84,16 +94,18 @@ public class CompanyService implements ICompanyService {
         company.setBusinessId(command.getBusinessId());
         company.setDayNumber(command.getDayNumber());
         company.setYearNumber(command.getYearNumber());
-        company.setSector(command.getSector());
+        Sector sector = sectorRepository.findOne(command.getSectorId());
+        company.setSector(sector);
         companyRepository.save(company);
         return company.getId();
     }
 
     @Override
-    public CompanyAndRatingProperties getRatingProperties(final EditionStep es, final Long companyId) {
+    public CompanyAndRatingProperties getRatingProperties(final Long stepId, final Long companyId) {
+        Step step = stepRepository.findOne(stepId);
         Company company = getCompanyForCurrentUser(companyId);
         // All entries
-        List<RatingType> ratingTypes = ratingTypeRepository.findByStepAndSectorOrSectorIsNull(es, company.getSector());
+        List<RatingType> ratingTypes = ratingTypeRepository.findByStepAndSectorOrSectorIsNull(stepId, company.getSector());
         boolean displayYear = false;
         Map<RatingType, RatingProperty> properties = new LinkedHashMap<RatingType, RatingProperty>();
         for (RatingType type : ratingTypes) {
@@ -103,18 +115,23 @@ public class CompanyService implements ICompanyService {
             properties.put(type, null);
         }
         for (Entry<RatingType, RatingProperty> e : company.getProperties().entrySet()) {
-            if (e.getKey().getStep() == es && (e.getKey().getSector() == null || e.getKey().getSector() == company.getSector())) {
-                properties.put(e.getKey(), e.getValue());
+            for (RatingTypeStep typeStep : e.getKey().getSteps()) {
+                if (typeStep.getStep().equals(step) && (e.getKey().getSectors().isEmpty() || e.getKey().getSectors().contains(company.getSector()))) {
+                    e.getKey().setHidden(typeStep.isHidden());
+                    properties.put(e.getKey(), e.getValue());
+                    break;
+                }
             }
         }
-        return new CompanyAndRatingProperties(company, properties, displayYear);
+        return new CompanyAndRatingProperties(company, properties, displayYear, step);
     }
 
     @Override
-    public void updateRatingProperties(final EditionStep es, final Long companyId, final PropertyCommand command) {
+    public Step updateRatingProperties(final Long stepId, final Long companyId, final PropertyCommand command) {
         Company company = getCompanyForCurrentUser(companyId);
+        Step step = stepRepository.findOne(stepId);
         for (Entry<String, MapProperties> e : command.getProperties().entrySet()) {
-            RatingType ratingType = ratingTypeRepository.findByNameAndStep(e.getKey(), es);
+            RatingType ratingType = ratingTypeRepository.findByNameAndSteps(e.getKey(), stepId);
             RatingProperty property = company.getProperties().get(ratingType);
             if (property == null) {
                 property = new RatingProperty(company, ratingType);
@@ -133,6 +150,12 @@ public class CompanyService implements ICompanyService {
             }
             ratingPropertyRepository.save(property);
         }
+        Pageable first = new PageRequest(0, 1);
+        List<Step> steps = stepRepository.getNext(step.getOrder(), company.getSector(), first);
+        if (steps.isEmpty()) {
+            return null;
+        }
+        return steps.get(0);
     }
 
     @Override
@@ -176,7 +199,7 @@ public class CompanyService implements ICompanyService {
             rts.add(r);
             map.put(r.getMenu(), rts);
         }
-
+        company.setScore((Integer) result.get("NOTE_FINALE_STABILISEE"));
         List<Factor> factors = factorRepository.findBySectorOrSectorIsNull(company.getSector());
         return new CompanyReport(company, map, result, factors);
     }

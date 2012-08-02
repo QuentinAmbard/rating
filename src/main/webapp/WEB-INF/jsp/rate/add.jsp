@@ -75,10 +75,10 @@
 	      	</span>
 	      </label>
 		   <div class="controls">
-		   <form:select id="sector" path="sector">
-			  <c:forEach var="lang" items="${sectors}">
-			    <form:option value="${lang}">
-					<spring:message code="enum.sector.${lang}"/>
+		   <form:select id="sector" path="sectorId">
+			  <c:forEach var="sector" items="${sectors}">
+			    <form:option value="${sector.id}">
+					<spring:message code="sector.${sector.name}"/>
 			    </form:option>
 			  </c:forEach>
 			</form:select>

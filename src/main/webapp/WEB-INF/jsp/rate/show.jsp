@@ -30,9 +30,9 @@
 	
     <div class="span6">
     
-	<h2>Entreprise ${report.company.name} : ${report.company.score} <spring:message code="note.NOTE_FINALE_TXT.${report.results['NOTE_FINALE_STABILISEE']}"/></h2>
+	<h2>Entreprise ${report.company.name} : <spring:message code="note.NOTE_FINALE_TXT.${report.company.score}"/></h2>
 	<p>Identifiant : ${report.company.businessId}</p>
-        <div data-max-value="19" data-score="<c:out value="${report.results['NOTE_FINALE_STABILISEE']}"/>" style="width: 400px" class="slider"></div>
+        <div data-max-value="19" data-score="<c:out value="${report.company.score}"/>" style="width: 400px" class="slider"></div>
     
 	    <h3>Description</h3>
 	    <c:choose>
@@ -114,10 +114,10 @@
 		
 		<h3>Factors</h3>
 	    <c:forEach var="factor" items="${report.factors}" >
-	       <h3><spring:message code="factor.${factor.name}"/></h3>
+	       <h4 style="margin: 20px 0px 9px 0px"><spring:message code="factor.${factor.name}"/></h4>
 		    <div data-max-value="7" data-score="<c:out value="${report.results[factor.name]}"/>" style="width: 400px" class="slider"></div>
 	    </c:forEach>
-				
+		<br /><br />
 		<h3>Informations</h3>
 		<c:if test="${report.company.validated}">
 			<div class="alert alert-success">

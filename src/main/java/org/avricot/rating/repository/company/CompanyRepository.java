@@ -9,9 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CompanyRepository extends CrudRepository<Company, Long>, CompanyRepositoryCustom {
 
-    @Query(value = "select c from Company c left join fetch c.properties p left join fetch p.values where c.id=?1 and c.user.id=?2")
+    @Query(value = "select c from Company c left join fetch c.sector s left join fetch c.properties p left join fetch p.values where c.id=?1 and c.user.id=?2")
     Company getByIdAndUserId(Long companyId, Long userId);
 
+    @Query(value = "select c from Company c left join fetch c.sector s where c.user.id=?1")
     List<Company> getByUserId(Long userId);
 
     @Modifying
@@ -24,6 +25,6 @@ public interface CompanyRepository extends CrudRepository<Company, Long>, Compan
     @Query(value = "select c from Company c left join fetch c.managers where c.id=?1 and c.user.id=?2")
     Company getByIdAndUserIdFetchingManagers(Long companyId, Long id);
 
-    @Query(value = "select c from Company c left join fetch c.managers m left join fetch c.shareholders s left join fetch c.properties p left join fetch p.values where c.id=?1 and c.user.id=?2")
+    @Query(value = "select c from Company c left join fetch c.sector sector left join fetch c.managers m left join fetch c.shareholders s left join fetch c.properties p left join fetch p.values where c.id=?1 and c.user.id=?2")
     Company getByIdAndUserIdFetchingReport(Long companyId, Long id);
 }

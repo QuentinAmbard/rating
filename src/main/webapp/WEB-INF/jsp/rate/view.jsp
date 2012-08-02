@@ -42,7 +42,7 @@
 	      <td><c:out value="${company.name}"/></td>
 	      <td><c:out value="${company.businessId}"/></td>
 	      <td><c:out value="${company.creationDate}"/></td>
-	      <td><spring:message code="enum.sector.${company.sector.name}"/></td>
+	      <td><spring:message code="sector.${company.sector.name}"/></td>
 	      <td>
 		      <c:if test="${company.validated}">
 			   	<input class="_validate" data-id="<c:out value="${company.id}"/>" id="validate<c:out value="${company.id}"/>" type="checkbox" checked="checked" /> <label style="cursor: pointer; display: inline" for="validate<c:out value="${company.id}"/>">Validated</label>
@@ -51,7 +51,16 @@
 			   	<input class="_validate" data-id="<c:out value="${company.id}"/>" id="validate<c:out value="${company.id}"/>" type="checkbox" /> <label style="cursor: pointer; display: inline" for="validate<c:out value="${company.id}"/>">Validate</label>
 		      </c:if>
 	      </td>
-	      <td><c:out value="${company.score}"/></td>
+	      <td>
+	       <c:choose>
+			<c:when test="${empty company.score}">
+				-
+			</c:when>
+			<c:otherwise>
+				<spring:message code="note.NOTE_FINALE_TXT.${company.score}"/>
+			</c:otherwise>
+		    </c:choose>
+		  </td>
 	      <td>
 			  <a class="btn btn-primary" id="edit<c:out value="${company.id}"/>" <c:if test="${company.validated}">style="display: none"</c:if>href="<c:url value="/rate/add/${company.id}"/>"><i class="icon-pencil"></i> Edit</a> 
 		      <a class="btn btn-success" href="<c:url value="/rate/show/${company.id}"/>"><i class="icon-eye-open"></i> View details</a> 

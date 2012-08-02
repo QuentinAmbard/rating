@@ -3,7 +3,6 @@ package org.avricot.rating.service;
 import java.util.Date;
 
 import org.avricot.rating.model.company.Company;
-import org.avricot.rating.model.company.Sector;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class CompanyCommand {
@@ -16,12 +15,12 @@ public class CompanyCommand {
     private String description;
     private String businessId;
     private Date creationDate;
-    private Sector sector;
+    private Long sectorId;
     private int dayNumber;
     private int yearNumber;
 
     public CompanyCommand() {
-
+        dayNumber = 365;
     }
 
     public CompanyCommand(final Company company) {
@@ -31,7 +30,7 @@ public class CompanyCommand {
         annalistName = company.getAnnalistName();
         businessId = company.getBusinessId();
         creationDate = company.getCreationDate();
-        sector = company.getSector();
+        sectorId = company.getSector().getId();
         dayNumber = company.getDayNumber();
         yearNumber = company.getYearNumber();
     }
@@ -60,12 +59,12 @@ public class CompanyCommand {
         this.creationDate = creationDate;
     }
 
-    public Sector getSector() {
-        return sector;
+    public Long getSectorId() {
+        return sectorId;
     }
 
-    public void setSector(final Sector sector) {
-        this.sector = sector;
+    public void setSectorId(final Long sectorId) {
+        this.sectorId = sectorId;
     }
 
     public int getDayNumber() {

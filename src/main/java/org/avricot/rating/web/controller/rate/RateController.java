@@ -11,8 +11,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.avricot.rating.model.company.Company;
-import org.avricot.rating.model.company.EditionStep;
-import org.avricot.rating.model.company.Sector;
+import org.avricot.rating.model.company.Step;
 import org.avricot.rating.model.user.User;
 import org.avricot.rating.security.SecurityUtils;
 import org.avricot.rating.service.CompanyAndRatingProperties;
@@ -22,6 +21,7 @@ import org.avricot.rating.service.CompanySearchCriterion;
 import org.avricot.rating.service.ICompanyService;
 import org.avricot.rating.service.ManagerCommand;
 import org.avricot.rating.service.ShareholderCommand;
+import org.avricot.rating.service.sector.ISectorService;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +44,9 @@ public class RateController {
     }
 
     @Inject
-    ICompanyService companyService;
+    private ICompanyService companyService;
+    @Inject
+    private ISectorService sectorService;
 
     @RequestMapping(value = { "/home" }, method = RequestMethod.GET)
     public String home(final Model model) {
@@ -61,15 +63,15 @@ public class RateController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String toAdd(final Model model) {
         model.addAttribute("command", new CompanyCommand());
-        model.addAttribute("sectors", Sector.values());
+        model.addAttribute("sectors", sectorService.findAll());
         return "rate/add";
     }
 
     @RequestMapping(value = "/add/{companyId}", method = RequestMethod.GET)
     public String toAddExisting(final Model model, @PathVariable final Long companyId) {
         Company company = companyService.getCompanyForCurrentUser(companyId);
-        model.addAttribute("command", company);
-        model.addAttribute("sectors", Sector.values());
+        model.addAttribute("command", new CompanyCommand(company));
+        model.addAttribute("sectors", sectorService.findAll());
         return "rate/add";
     }
 
@@ -118,34 +120,25 @@ public class RateController {
     }
 
     @RequestMapping(value = "/edit/{companyId}/{step}", method = RequestMethod.POST)
-    public String editStep(final Model model, @PathVariable final Long companyId, @PathVariable final int step, @ModelAttribute("command") final PropertyCommand command) {
-        EditionStep es = EditionStep.getByOrdinal(step);
-        if (es == null) {
-            return "redirect:/rate/edit/" + companyId + "/0";
-        }
-        companyService.updateRatingProperties(es, companyId, command);
+    public String editStep(final Model model, @PathVariable final Long companyId, @PathVariable final Long step, @ModelAttribute("command") final PropertyCommand command) {
+        Step nextStep = companyService.updateRatingProperties(step, companyId, command);
         if (!command.isNext()) {
-            return "redirect:/rate/edit/" + companyId + "/" + es.ordinal();
+            return "redirect:/rate/edit/" + companyId + "/" + step;
         }
-        if (es.getNext() == null) {
+        if (nextStep == null) {
             return "redirect:/rate/show/" + companyId;
         }
-        return "redirect:/rate/edit/" + companyId + "/" + es.getNext().ordinal();
+        return "redirect:/rate/edit/" + companyId + "/" + nextStep.getId();
     }
 
     @RequestMapping(value = "/edit/{companyId}/{step}", method = RequestMethod.GET)
-    public String editStep(final Model model, @PathVariable final Long companyId, @PathVariable final int step) throws ParseException {
-        EditionStep es = EditionStep.getByOrdinal(step);
-        if (es == null) {
-            es = EditionStep.getByOrdinal(0);
-        }
+    public String editStep(final Model model, @PathVariable final Long companyId, @PathVariable final Long step) throws ParseException {
         if (companyId == null) {
             return "redirect:/rate/home";
         }
-        CompanyAndRatingProperties data = companyService.getRatingProperties(es, companyId);
+        CompanyAndRatingProperties data = companyService.getRatingProperties(step, companyId);
         addYears(model, data.getCompany());
         model.addAttribute("data", data);
-        model.addAttribute("step", es);
         return "rate/edit";
     }
 

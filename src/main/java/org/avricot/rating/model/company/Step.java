@@ -1,4 +1,4 @@
-package org.avricot.rating.model.rating;
+package org.avricot.rating.model.company;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,22 +8,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.avricot.rating.model.DefaultObject;
-import org.avricot.rating.model.company.Sector;
 
 @Entity
-@Table(name = "FACTOR")
-public class Factor extends DefaultObject {
+@Table(name = "STEP")
+public class Step extends DefaultObject {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "ORDER")
+    private Integer order;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SECTOR_ID")
     private Sector sector;
-
-    @Column(name = "ORDER")
-    private Integer order;
 
     public String getName() {
         return name;

@@ -15,7 +15,7 @@
 <form id="editForm" method="POST">
   <input id="next" name="next" type="hidden" value="true"> 
   <fieldset>
-    <legend><spring:message code="enum.step.${step}"/></legend>
+    <legend><spring:message code="enum.step.${data.step.name}"/></legend>
     <table class="table table-bordered">
 	  <thead>
 	    <tr>
