@@ -55,29 +55,40 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="<c:url value="/"/>">Fairness rating</a>
-          <sec:authorize ifAllGranted="ROLE_USER">
-	          <div class="btn-group pull-right">
-	            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-	              <i class="icon-user"></i> <c:out value="${user.firstname} ${user.lastname}" />
-	              <span class="caret"></span>
-	            </a>
-	            <ul class="dropdown-menu">
-	              <li><a href="<c:url value="/profile/"/>">Profile</a></li>
-	              <li class="divider"></li>
-	              <li><a href="<c:url value="/logout"/>">Sign Out</a></li>
-	            </ul>
-	          </div>
-          </sec:authorize>
+          <div class="btn-group pull-right">
+	          <sec:authorize ifAllGranted="ROLE_USER">
+		            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		              <i class="icon-user"></i> <c:out value="${user.firstname} ${user.lastname}" />
+		              <span class="caret"></span>
+		            </a>
+		            <ul class="dropdown-menu">
+		              <li><a href="<c:url value="/profile/"/>">Profile</a></li>
+		              <li class="divider"></li>
+		              <li><a href="<c:url value="/logout"/>">Sign Out</a></li>
+		            </ul>
+	          </sec:authorize>
+	          <sec:authorize ifNotGranted="ROLE_USER">
+		          <form style="margin: 0px;" action="<c:url value="/j_spring_security_check"/>" method="post">
+					<input type="text" name="j_username" value="demo@gmail.com" />
+					<input type="password" name="j_password" value="demo" />
+					<input style="margin-top: -9px;" class="btn" type="submit" value="connection" />
+				</form>
+			  </sec:authorize>          
+		  </div>
           
           <div class="nav-collapse">
             <ul class="nav">
               <sec:authorize ifAllGranted="ROLE_USER">
-	              <li><a href="<c:url value="/rate/home"/>">Home</a></li>
+	              <li><a href="<c:url value="/rate/home"/>">Dashboard</a></li>
 	              <li><a href="<c:url value="/rate/add"/>">New company</a></li>
 	              <li><a href="<c:url value="/rate/view"/>">View companies</a></li>
 	          </sec:authorize>
-              <li><a href="<c:url value="/about"/>">About</a></li>
-              <li><a href="<c:url value="/contact"/>">Contact</a></li>
+              <li><a href="<c:url value="/"/>">Home</a></li>
+              <li><a href="<c:url value="/about"/>">About us</a></li>
+              <li><a href="<c:url value="/service"/>">Services</a></li>
+              <li><a href="<c:url value="/solution"/>">Solution</a></li>
+              <li><a href="<c:url value="/career"/>">Careers</a></li>
+              <li><a href="<c:url value="/contact"/>">Contact us</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

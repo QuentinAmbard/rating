@@ -14,8 +14,29 @@ public class HomeController {
         return "home";
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String home2(final Model model) {
-        return "home";
+    @RequestMapping(value = "/contact", method = RequestMethod.GET)
+    public String contact(final Model model) {
+        return "/public/contact";
     }
+
+    @RequestMapping(value = "/service", method = RequestMethod.GET)
+    public String service(final Model model) {
+        return "/public/service";
+    }
+
+    @RequestMapping(value = "/about", method = RequestMethod.GET)
+    public String about(final Model model) {
+        return "/public/about";
+    }
+
+    @RequestMapping(value = "/solution", method = RequestMethod.GET)
+    public String solution(final Model model) {
+        return "/public/solution";
+    }
+
+    @RequestMapping(value = "/career", method = RequestMethod.GET)
+    public String career(final Model model) {
+        return "/public/career";
+    }
+
 }

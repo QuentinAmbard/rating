@@ -30,13 +30,13 @@
 			<list>
 				<value>classpath:messages/common</value>
 				<value>classpath:messages/note</value>
-				<value>classpath:messages/nmp</value>
-				<value>classpath:messages/aco</value>
-				<value>classpath:messages/pim</value>
-				<value>classpath:messages/tdi</value>
-				<value>classpath:messages/twi</value>
 				<value>classpath:messages/result</value>
 				<value>classpath:messages/text</value>
+				<value>classpath:messages/sector/aco</value>
+				<value>classpath:messages/sector/nmp</value>
+				<value>classpath:messages/sector/pim</value>
+				<value>classpath:messages/sector/tdi</value>
+				<value>classpath:messages/sector/twi</value>
 			</list>
 		</property>
 		<property name="cacheSeconds" value="${resource.cache.seconds}"/>
