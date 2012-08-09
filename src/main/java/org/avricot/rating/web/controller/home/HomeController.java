@@ -1,13 +1,24 @@
 package org.avricot.rating.web.controller.home;
 
+import org.avricot.rating.model.user.User;
+import org.avricot.rating.security.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
+
+    @ModelAttribute("user")
+    public User getUser() {
+        if (!SecurityUtils.isAuthenticated()) {
+            return null;
+        }
+        return SecurityUtils.getCurrentUser();
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String home(final Model model) {
