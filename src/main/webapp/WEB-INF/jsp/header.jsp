@@ -20,7 +20,7 @@
     <link href="<c:url value="/resources/css/jquery-ui.css"/>" rel="stylesheet">
     <style type="text/css">
       body {
-        padding-top: 60px;
+        padding-top: 110px;
         padding-bottom: 40px;
       }
     </style>
@@ -46,16 +46,10 @@
   </head>
   <body>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="<c:url value="/"/>">Fairness rating</a>
-          <div class="btn-group pull-right">
+    <div class="navbar navbar-fixed-top" >
+      <div class="container navbar-inner" style="background-color: white; background-image: none; border: 0px; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;">
+    	<a class="brand" href="<c:url value="/"/>" style="margin: 0px; padding: 5px 5px 5px 5px"><img src="<c:url value="/resources/img/home/brand.png"/>" height="50px" /></a>
+          <div class="btn-group pull-right" style="margin: 10px 0px 0px 0px">
 	          <sec:authorize ifAllGranted="ROLE_USER">
 		            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 		              <i class="icon-user"></i> <c:out value="${user.firstname} ${user.lastname}" />
@@ -69,12 +63,20 @@
 	          </sec:authorize>
 	          <sec:authorize ifNotGranted="ROLE_USER">
 		          <form style="margin: 0px;" action="<c:url value="/j_spring_security_check"/>" method="post">
-					<input type="text" name="j_username" value="demo@gmail.com" />
-					<input type="password" name="j_password" value="demo" />
+					<input type="text" name="j_username" value="demo@gmail.com" style="width: 140px"  />
+					<input type="password" name="j_password" value="demo" style="width: 80px" />
 					<input style="margin-top: -9px;" class="btn" type="submit" value="connection" />
 				</form>
 			  </sec:authorize>          
 		  </div>
+	  </div>
+      <div class="navbar-inner" style="background-image: -webkit-linear-gradient(top, #325a8e, #183e70);">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
           
           <div class="nav-collapse">
             <ul class="nav">

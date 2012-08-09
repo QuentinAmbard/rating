@@ -1,23 +1,30 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
-<div id="myCarousel" class="carousel slide" style="width: 900px; margin: auto;">
+<div id="myCarousel" class="carousel slide" style="width: 970px; margin: auto;">
   <div class="carousel-inner">
     <div class="item active">
-      <img src="<c:url value="/resources/img/home/galet.jpg"/>" alt="">
+      <img style="border-radius: 10px;" src="<c:url value="/resources/img/home/galet.jpg"/>" style="width: 970px" alt="">
       <div class="carousel-caption">
         <h4>First Thumbnail label</h4>
         <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
       </div>
     </div>
     <div class="item">
-      <img src="<c:url value="/resources/img/home/crayon.jpg"/>" alt="">
+      <img style="border-radius: 10px;" src="<c:url value="/resources/img/home/caroussel2.jpg"/>" alt="">
       <div class="carousel-caption">
         <h4>Second Thumbnail label</h4>
         <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
       </div>
     </div>
     <div class="item">
-      <img src="<c:url value="/resources/img/home/city.jpg"/>" alt="">
+      <img style="border-radius: 10px;" src="<c:url value="/resources/img/home/caroussel3.jpg"/>" alt="">
+      <div class="carousel-caption">
+        <h4>Third Thumbnail label</h4>
+        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+      </div>
+    </div>
+    <div class="item">
+      <img style="border-radius: 10px;" src="<c:url value="/resources/img/home/caroussel1.jpg"/>" alt="">
       <div class="carousel-caption">
         <h4>Third Thumbnail label</h4>
         <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>

@@ -20,7 +20,7 @@
 			var el = $(this); 
 			el.slider({ value:el.attr("data-score"),
 				min: 0,
-				max: el.attr("data-max-value"),
+				max:  parseInt(el.attr("data-max-value"),10),
 				disabled: true });
 		});
 	});
@@ -115,8 +115,11 @@
 		<h3>Factors</h3>
 	    <c:forEach var="factor" items="${report.factors}" >
 	       <h4 style="margin: 20px 0px 9px 0px"><spring:message code="factor.${factor.name}"/></h4>
+	       <sec:authorize ifAllGranted="ROLE_SUPER_ADMIN">
+			    <c:out value="${report.results[factor.name]}"/> <c:out value="${factor.name}"/>
+		    </sec:authorize>
 		    <div data-max-value="7" data-score="<c:out value="${report.results[factor.name]}"/>" style="width: 400px" class="slider"></div>
-	    </c:forEach>
+	    </c:forEach> 
 		<br /><br />
 		<h3>Informations</h3>
 		<c:if test="${report.company.validated}">

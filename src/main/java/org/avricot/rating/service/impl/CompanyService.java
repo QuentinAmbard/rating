@@ -187,8 +187,8 @@ public class CompanyService implements ICompanyService {
                 properties.put(e.getKey().getName(), e.getValue().getGlobalValue());
             }
         }
-        Map<String, Object> result = rulesService.executeRules(new HashMap<String, Object>(), "result", new String[] { "helper", "prop", "company" }, new Object[] { ruleHelper,
-                properties, company });
+        Map<String, Object> result = rulesService.executeRules(new LinkedHashMap<String, Object>(), "result", new String[] { "helper", "prop", "company" }, new Object[] {
+                ruleHelper, properties, company });
         List<Result> resultTypes = resultRepository.findBySectorOrSectorIsNull(company.getSector());
         Map<String, List<Result>> map = new LinkedHashMap<String, List<Result>>();
         for (Result r : resultTypes) {
