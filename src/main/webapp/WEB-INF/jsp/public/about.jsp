@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
+<img style="border: 1px #393A73 solid; float: right; margin: 20px;" src="<c:url value="/resources/img/home/aboutus.jpg"/>" />
 <header class="jumbotron subhead" id="overview">
   <h1>About us</h1>
   <p class="lead">Located in Paris, Fairness-rating is a solutions provider dedicated to the banking and financial industry.</p>

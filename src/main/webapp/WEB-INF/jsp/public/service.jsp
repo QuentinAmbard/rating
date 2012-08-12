@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
+<img style="border: 1px #393A73 solid; float: right; margin: 10px;" src="<c:url value="/resources/img/home/service.jpg"/>" />
 <header class="jumbotron subhead" id="overview">
   <h1>Our services</h1>
   <p class="lead">Fairness-rating provides a wide range of services.</p>
