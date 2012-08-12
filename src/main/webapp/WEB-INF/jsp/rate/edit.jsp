@@ -19,7 +19,7 @@
     <table class="table table-bordered">
 	  <thead>
 	    <tr>
-	      <th style="width: 250px">Nom</th>
+	      <th style="width: 250px">Name</th>
 	      <c:choose>
 	      	<c:when test="${data.displayYear}">
 		      <c:forEach var="year" items="${years}" varStatus="statusYears">

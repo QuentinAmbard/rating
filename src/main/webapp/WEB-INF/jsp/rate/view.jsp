@@ -15,8 +15,8 @@
 	});
 </script>
 
-<h2>Entreprises notée</h2>
-<p>Voici la liste de vos entreprise notées ou en cours de notation.</p>
+<h2>Registred companies</h2>
+<p>Here is the list of your registred companies.</p>
 
 <form class="well form-search" action="<c:url value="/rate/search"/>" method="GET">
   Search company by name <input name="companyName" type="text" class="input-medium search-query">

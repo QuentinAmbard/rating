@@ -9,6 +9,6 @@
 <h3>Financial Analysis</h3>
 <h3>Banking and prudential regulation</h3>
 <br /><br />
-Please <a href="<c:url value="/contact"/>">contact us</a> for mor informations.
+Please <a href="<c:url value="/contact"/>">contact us</a> for more informations.
 
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>

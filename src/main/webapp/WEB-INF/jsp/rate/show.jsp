@@ -30,8 +30,8 @@
 	
     <div class="span6">
     
-	<h2>Entreprise ${report.company.name} : <spring:message code="note.NOTE_FINALE_TXT.${report.company.score}"/></h2>
-	<p>Identifiant : ${report.company.businessId}</p>
+	<h2>Company ${report.company.name} : <spring:message code="note.NOTE_FINALE_TXT.${report.company.score}"/></h2>
+	<p>Company id : ${report.company.businessId}</p>
         <div data-max-value="19" data-score="<c:out value="${report.company.score}"/>" style="width: 400px" class="slider"></div>
     
 	    <h3>Description</h3>

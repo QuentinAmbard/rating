@@ -2,7 +2,11 @@
 <script type="text/javascript">
 	$(document).ready(function () {
 		$("#formAdd").validate();
-		$( "#creationDate" ).datepicker({dateFormat: "dd/mm/yy"});
+		$( "#creationDate" ).datepicker({
+			dateFormat: "dd/mm/yy",
+			changeMonth: true,
+			changeYear: true
+		});
 		$('#save').click(function () {
 			$('#next').val("false");
 			$('#formAdd').submit();
@@ -32,7 +36,7 @@
     <div class="row show-grid">
 	  <div class="span6">
 	    <div class="control-group">
-	      <label class="control-label" for="annalistName">Annalist name *</label>
+	      <label class="control-label" for="annalistName">Analyst name *</label>
 	      <div class="controls">
 			<form:input path="annalistName" id="annalistName" cssClass="required"  cssErrorClass="error" />
 	      </div>
