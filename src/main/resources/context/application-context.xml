@@ -37,6 +37,7 @@
 				<value>classpath:messages/sector/pim</value>
 				<value>classpath:messages/sector/tdi</value>
 				<value>classpath:messages/sector/twi</value>
+				<value>classpath:messages/sector/shi</value>
 			</list>
 		</property>
 		<property name="cacheSeconds" value="${resource.cache.seconds}"/>
