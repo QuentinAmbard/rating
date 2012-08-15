@@ -12,6 +12,17 @@
 	});
 </script>
 
+<div class="subnav">
+  <ul class="nav nav-pills">
+    <li class=""><a href="<c:url value="/rate/add/${data.company.id}"/>">Creation</a></li>
+    <li class=""><a href="<c:url value="/rate/shareholder/${data.company.id}"/>">Shareholders</a></li>
+    <li class=""><a href="<c:url value="/rate/manager/${data.company.id}"/>">Managers</a></li>
+    <c:forEach var="step" items="${steps}" varStatus="status" >
+	    <li class="<c:if test="${step.id == data.step.id}">active</c:if>"><a href="<c:url value="/rate/edit/${data.company.id}/${step.id}"/>">Step <c:out value="${status.index+1}" /></a></li>
+    </c:forEach>
+  </ul>
+</div>
+        
 <form id="editForm" method="POST">
   <input id="next" name="next" type="hidden" value="true"> 
   <fieldset>

@@ -10,6 +10,9 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface StepRepository extends CrudRepository<Step, Long> {
 
+    @Query("from Step s where s.sector = null or s.sector=?1 order by s.order ASC")
+    List<Step> getBySector(Sector sector);
+
     @Query("from Step s where s.order>?1 and (s.sector = null or s.sector=?2) order by s.order ASC")
     List<Step> getNext(Integer stepOrder, Sector sector, Pageable pageable);
 }

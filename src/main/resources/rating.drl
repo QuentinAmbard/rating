@@ -340,7 +340,7 @@ end
 
 rule "test sector SHI"
 when
-	Company(sector.name() == "SHI")
+	eval(company.getSector().getName().equals("SHI"))
 then
 	result.put("NOTE8_FACTOR1_SALES", helper.getFork("SHI_SALES",get(prop, "INCOME_SALES").getLastYear()));
 	result.put("NOTE8_FACTOR1_SIZE_OF_FLEET", getGlobalValue(prop, "SHI_FACTOR1_SIZE_OF_FLEET"));

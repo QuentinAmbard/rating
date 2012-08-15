@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import org.avricot.rating.model.company.Company;
 import org.avricot.rating.model.company.Step;
 import org.avricot.rating.model.user.User;
+import org.avricot.rating.repository.step.StepRepository;
 import org.avricot.rating.security.SecurityUtils;
 import org.avricot.rating.service.CompanyAndRatingProperties;
 import org.avricot.rating.service.CompanyCommand;
@@ -47,6 +48,8 @@ public class RateController {
     private ICompanyService companyService;
     @Inject
     private ISectorService sectorService;
+    @Inject
+    private StepRepository stepRepository;
 
     @RequestMapping(value = { "/home" }, method = RequestMethod.GET)
     public String home(final Model model) {
@@ -91,6 +94,7 @@ public class RateController {
     public String shareHolder(final Model model, @PathVariable final Long companyId) {
         Company company = companyService.getCompanyShareHolderForCurrentUser(companyId);
         model.addAttribute("command", new ShareholderCommand(company));
+        model.addAttribute("steps", stepRepository.getBySector(company.getSector()));
         return "/rate/shareholder";
     }
 
@@ -106,6 +110,7 @@ public class RateController {
     @RequestMapping(value = "/manager/{companyId}", method = RequestMethod.GET)
     public String manager(final Model model, @PathVariable final Long companyId) {
         Company company = companyService.getCompanyManagersForCurrentUser(companyId);
+        model.addAttribute("steps", stepRepository.getBySector(company.getSector()));
         model.addAttribute("command", new ManagerCommand(company));
         return "/rate/manager";
     }
@@ -137,6 +142,7 @@ public class RateController {
             return "redirect:/rate/home";
         }
         CompanyAndRatingProperties data = companyService.getRatingProperties(step, companyId);
+        model.addAttribute("steps", stepRepository.getBySector(data.getCompany().getSector()));
         addYears(model, data.getCompany());
         model.addAttribute("data", data);
         return "rate/edit";

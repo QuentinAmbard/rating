@@ -8,7 +8,16 @@
 		$('._popover').popover();
 	});
 </script>
-	
+<div class="subnav">
+  <ul class="nav nav-pills">
+    <li class=""><a href="<c:url value="/rate/add/${companyId}"/>">Creation</a></li>
+    <li class=""><a href="<c:url value="/rate/shareholder/${companyId}"/>">Shareholders</a></li>
+    <li class=""><a href="<c:url value="/rate/manager/${companyId}"/>">Managers</a></li>
+    <c:forEach var="step" items="${steps}" varStatus="status" >
+	    <li class=""><a href="<c:url value="/rate/edit/${companyId}/${step.id}"/>">Step <c:out value="${status.index+1}" /></a></li>
+    </c:forEach>
+  </ul>
+</div>
 <spring:hasBindErrors name="command">
    <ul>
       <c:forEach var="error" items="${errors.allErrors}">

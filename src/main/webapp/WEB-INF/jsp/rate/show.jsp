@@ -98,20 +98,6 @@
 			</c:otherwise>
 		</c:choose>    
 		<br />
-		<h3>Notes / conclusion</h3>
-		<div id="noteEdition" style="display: none">
-			<form method="post">
-			    <textarea name="note" style="width: 550px" rows="10"><c:out value="${report.company.note}"/></textarea>
-				<span id="editNoteCancel" class="btn"><i class="icon-remove"></i>Cancel</span>
-				<button type="submit" class="btn btn-success"><i class="icon-ok"></i> Save notes</button>
-			</form>
-		</div>
-		<div id="noteDisplay">
-			<c:out value="${report.company.note}"/><br />
-			<button id="editNote" type="submit" class="btn btn-primary"><i class="icon-pencil"></i> Edit notes</button>
-		</div>
-		<br />
-		
 		<h3>Factors</h3>
 	    <c:forEach var="factor" items="${report.factors}" >
 	       <h4 style="margin: 20px 0px 9px 0px"><spring:message code="factor.${factor.name}"/></h4>
@@ -166,7 +152,20 @@
 	  </c:forEach>
 	</div>
 </div>
-
+<br /><br />
+<h3>Notes / conclusion</h3>
+<div id="noteEdition" style="display: none">
+	<form method="post">
+	    <textarea name="note" style="width: 960px" rows="10"><c:out value="${report.company.note}"/></textarea>
+		<span id="editNoteCancel" class="btn"><i class="icon-remove"></i>Cancel</span>
+		<button type="submit" class="btn btn-success"><i class="icon-ok"></i> Save notes</button>
+	</form>
+</div>
+<div id="noteDisplay">
+	<c:out value="${report.company.note}"/><br />
+	<button id="editNote" type="submit" class="btn btn-primary"><i class="icon-pencil"></i> Edit notes</button>
+</div>
+<br />
 <sec:authorize ifAllGranted="ROLE_SUPER_ADMIN">
 <c:forEach var="resutValue" items="${report.results}">
 	<c:out value="${resutValue.key}"/> => <c:out value="${resutValue.value}"/><br />
